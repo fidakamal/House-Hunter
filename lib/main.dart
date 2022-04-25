@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_hunter/map.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(),
+      body: const Map(),
     );
   }
 }
