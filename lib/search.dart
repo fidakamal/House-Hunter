@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:house_hunter/search_filters.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key,}) : super(key: key);
+  const SearchBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class SearchBar extends StatelessWidget {
         children: <Widget>[
           IconButton(
             splashColor: Colors.grey,
-            icon: const Icon(Icons.menu),
+            icon: const Icon(Icons.menu_rounded),
             onPressed: () {},
           ),
           const Expanded(
@@ -33,12 +35,17 @@ class SearchBar extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.deepPurple,
-              child: Text('RD'),
-            ),
+          IconButton(
+            splashColor: Colors.grey,
+            icon: const Icon(Icons.tune_rounded),
+            onPressed: () {
+              showMaterialModalBottomSheet<dynamic>(
+                expand: false,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => const SearchFilters(),
+              );
+            },
           ),
         ],
       ),
