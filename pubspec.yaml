@@ -38,6 +38,8 @@ dependencies:
   modal_bottom_sheet: ^2.0.1
   group_button: ^5.0.0
   salomon_bottom_bar: ^3.3.0
+  cloud_firestore: ^3.1.13
+  firebase_core: ^1.15.0
 
 dev_dependencies:
   flutter_test:
