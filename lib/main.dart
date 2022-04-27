@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/map.dart';
 import 'package:house_hunter/search.dart';
 
@@ -42,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
