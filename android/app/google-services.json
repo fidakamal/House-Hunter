@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "270203334987",
+    "project_id": "house-hunter-2aa8d",
+    "storage_bucket": "house-hunter-2aa8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270203334987:android:1be9ab430d5e0e3e56f8ce",
+        "android_client_info": {
+          "package_name": "com.example.house_hunter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270203334987-gpls7bjgcjsao26ih4i34br5fti4ve6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLPEKUJo2frnifBloELvUre8EO8KTOMhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270203334987-gpls7bjgcjsao26ih4i34br5fti4ve6m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
