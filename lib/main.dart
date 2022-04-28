@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/map.dart';
-import 'package:house_hunter/search.dart';
+import 'package:house_hunter/search_bar.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -33,15 +36,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: const [
+        children: [
           Map(),
           SafeArea(
-              child: SearchBar(),
+            child: SearchBar(),
           ),
         ],
       ),
