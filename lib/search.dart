@@ -7,7 +7,8 @@ class Search {
   late double longitude;
   final geo = Geoflutterfire();
   final _firestore = FirebaseFirestore.instance;
-  static late List<DocumentSnapshot> searchResults;
+  static late Stream<List<DocumentSnapshot>> searchResultsStream =
+      Stream.empty();
 
   void searchRentals(String searchLocation) async {
     await getCoordinates(searchLocation);
@@ -32,10 +33,15 @@ class Search {
         .collection(collectionRef: collectionReference)
         .within(center: center, radius: radius, field: locationField);
 
+    searchResultsStream = stream;
+
     stream.listen((List<DocumentSnapshot> documentList) {
-      searchResults = documentList;
       print(documentList[0].data());
     });
+  }
+
+  Stream<List<DocumentSnapshot>> getSearchResults() {
+    return searchResultsStream;
   }
 
   void addLocation() {

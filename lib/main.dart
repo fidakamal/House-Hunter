@@ -4,6 +4,7 @@ import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/map.dart';
 import 'package:house_hunter/search_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'list_view.dart';
 
 void main() async {
   await dotenv.load();
