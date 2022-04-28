@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:house_hunter/Routes.dart';
 import 'package:house_hunter/bottom_navigation.dart';
-import 'package:house_hunter/map.dart';
-import 'package:house_hunter/search_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -36,18 +35,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  PageName currentPage = PageName.map;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Map(),
-          SafeArea(
-            child: SearchBar(),
-          ),
-        ],
+      body: Routes(currentPage: currentPage),
+      bottomNavigationBar: BottomNavigation(
+        currentPage: currentPage,
+        onPageChange: (newPage) => {
+          setState(() => currentPage = newPage),
+        },
       ),
-      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
