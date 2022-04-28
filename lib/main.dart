@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:house_hunter/Routes.dart';
 import 'package:house_hunter/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'profile.dart';
 
 void main() async {
   await dotenv.load();

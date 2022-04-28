@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/search_bar.dart';
 import 'package:house_hunter/map.dart';
+import 'profile.dart';
 
 class Routes extends StatelessWidget {
   const Routes({Key? key, required this.currentPage}) : super(key: key);
@@ -9,7 +10,7 @@ class Routes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch(currentPage) {
+    switch (currentPage) {
       case PageName.map:
         return Stack(
           children: [
@@ -31,10 +32,10 @@ class Routes extends StatelessWidget {
         // TODO: Handle this case.
         break;
       case PageName.profile:
-        // TODO: Handle this case.
-        break;
+        return SafeArea(
+          child: Profile(),
+        );
     }
     return Container();
   }
-  
 }
