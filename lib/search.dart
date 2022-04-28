@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
-class Search {
+class Search extends ChangeNotifier{
   late double latitude;
   late double longitude;
   final geo = Geoflutterfire();
   final _firestore = FirebaseFirestore.instance;
-  static late Stream<List<DocumentSnapshot>> searchResultsStream =
-      Stream.empty();
+  static late Stream<List<DocumentSnapshot>> searchResultsStream = Stream.empty();
+  List<DocumentSnapshot> results = <DocumentSnapshot>[];
 
   void searchRentals(String searchLocation) async {
     await getCoordinates(searchLocation);
@@ -36,7 +37,9 @@ class Search {
     searchResultsStream = stream;
 
     stream.listen((List<DocumentSnapshot> documentList) {
-      print(documentList[0].data());
+      //print(documentList[0].data());
+      results = documentList;
+      notifyListeners();
     });
   }
 

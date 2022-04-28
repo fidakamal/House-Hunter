@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/map.dart';
+import 'package:house_hunter/search.dart';
 import 'package:house_hunter/search_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'list_view.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => Search(),
+    child: const MyApp()
+  ));
 }
 
 class MyApp extends StatelessWidget {
