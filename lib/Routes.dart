@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:house_hunter/bottom_navigation.dart';
+import 'package:house_hunter/listing.dart';
 import 'package:house_hunter/search_bar.dart';
 import 'package:house_hunter/map.dart';
 
@@ -28,8 +29,7 @@ class Routes extends StatelessWidget {
           ],
         );
       case PageName.result:
-        // TODO: Handle this case.
-        break;
+        return SafeArea(child:Listing());
       case PageName.profile:
         // TODO: Handle this case.
         break;
