@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:house_hunter/bottom_navigation.dart';
+import 'package:house_hunter/list_view.dart';
 import 'package:house_hunter/map.dart';
 import 'package:house_hunter/search.dart';
 import 'package:house_hunter/search_bar.dart';
@@ -12,9 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(ChangeNotifierProvider(
-    create: (context) => Search(),
-    child: const MyApp()
-  ));
+      create: (context) => Search(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -44,13 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Map(),
-          SafeArea(
-            child: SearchBar(),
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            SearchBar(),
+            ResultsListView(),
+          ],
+        ),
       ),
       bottomNavigationBar: const BottomNavigation(),
     );
