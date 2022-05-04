@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({Key? key}) : super(key: key);
+enum PageName {map, list, result, profile}
 
-  @override
-  State<StatefulWidget> createState() => _BottomNavigation();
-}
+class BottomNavigation extends StatelessWidget {
+  const BottomNavigation({Key? key, required this.currentPage, required this.onPageChange}) : super(key: key);
+  final PageName currentPage;
+  final Function onPageChange;
 
-class _BottomNavigation extends State<BottomNavigation> {
-  var currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: SalomonBottomBar(
-        currentIndex: currentIndex,
-        onTap: (i) => setState(() => currentIndex = i),
+        currentIndex: currentPage.index,
+        onTap: (i) => onPageChange(PageName.values[i]),
         items: [
           SalomonBottomBarItem(
             icon: const Icon(Icons.map_rounded),
