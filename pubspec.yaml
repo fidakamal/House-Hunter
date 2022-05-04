@@ -43,6 +43,7 @@ dependencies:
   firebase_core: ^1.15.0
   geocoding: ^2.0.4
   geoflutterfire: ^3.0.3
+  provider: ^6.0.2
   carousel_slider: ^4.1.1
 
 dev_dependencies:

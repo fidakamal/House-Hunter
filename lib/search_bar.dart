@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:house_hunter/search.dart';
 import 'package:house_hunter/search_filters.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'search.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatelessWidget {
   String searchLocation = '';
@@ -20,7 +21,7 @@ class SearchBar extends StatelessWidget {
             splashColor: Colors.grey,
             icon: const Icon(Icons.search),
             onPressed: () {
-              Search().searchRentals(searchLocation);
+              Provider.of<Search>(context, listen: false).searchRentals(searchLocation);
             },
           ),
           Expanded(
