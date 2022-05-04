@@ -3,6 +3,7 @@ import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/listing.dart';
 import 'package:house_hunter/search_bar.dart';
 import 'package:house_hunter/map.dart';
+import 'package:house_hunter/list_view.dart';
 
 class Routes extends StatelessWidget {
   const Routes({Key? key, required this.currentPage}) : super(key: key);
@@ -10,7 +11,7 @@ class Routes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch(currentPage) {
+    switch (currentPage) {
       case PageName.map:
         return Stack(
           children: [
@@ -21,20 +22,20 @@ class Routes extends StatelessWidget {
           ],
         );
       case PageName.list:
-        return Stack(
-          children: [
-            SafeArea(
-              child: SearchBar(),
-            ),
-          ],
+        return SafeArea(
+          child: Column(
+            children: <Widget>[
+              SearchBar(),
+              ResultsListView(),
+            ],
+          ),
         );
       case PageName.result:
-        return SafeArea(child:Listing());
+        return SafeArea(child: Listing());
       case PageName.profile:
         // TODO: Handle this case.
         break;
     }
     return Container();
   }
-  
 }
