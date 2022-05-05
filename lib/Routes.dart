@@ -34,7 +34,7 @@ class Routes extends StatelessWidget {
               ),
             );
           case PageName.result:
-            return SafeArea(child: Listing());
+            return SafeArea(child: Listing(document: navigation.selectedDocument));
           case PageName.profile:
           // TODO: Handle this case.
             break;

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:house_hunter/Navigation.dart';
 import 'package:provider/provider.dart';
+import 'bottom_navigation.dart';
 import 'search.dart';
 
 class ResultsListView extends StatefulWidget {
@@ -28,7 +30,8 @@ class _ResultsListViewState extends State<ResultsListView> {
                 margin: EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () {
-                    print("card tapped");
+                    Provider.of<Navigation>(context, listen: false).updateSelectedDocument(rental);
+                    Provider.of<Navigation>(context, listen: false).updateCurrentPage(PageName.result);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

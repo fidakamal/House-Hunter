@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:house_hunter/Navigation.dart';
+import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/listing_card.dart';
 import 'package:house_hunter/search.dart';
 import 'package:latlong2/latlong.dart';
@@ -38,7 +40,13 @@ class Map extends StatelessWidget {
                         size: 40,
                       ),
                       itemBuilder: (context) => [
-                        PopupMenuItem(child: ListingCard(document: result)),
+                        PopupMenuItem(
+                          child: ListingCard(document: result),
+                          onTap: () {
+                            Provider.of<Navigation>(context, listen: false).updateSelectedDocument(result);
+                            Provider.of<Navigation>(context, listen: false).updateCurrentPage(PageName.result);
+                          }
+                        ),
                       ],
                     )
                 ),
