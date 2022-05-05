@@ -25,10 +25,10 @@ class Map extends StatelessWidget {
               ),
               MarkerLayerOptions(
                 rotate: true,
-                markers: search.results.map((marker) => Marker(
+                markers: search.results.map((result) => Marker(
                     width: 80.0,
                     height: 80.0,
-                    point: LatLng(marker['location']['geopoint'].latitude, marker['location']['geopoint'].longitude),
+                    point: LatLng(result['location']['geopoint'].latitude, result['location']['geopoint'].longitude),
                     builder: (context) => PopupMenuButton(
                       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       offset: popupOffset,
@@ -38,8 +38,7 @@ class Map extends StatelessWidget {
                         size: 40,
                       ),
                       itemBuilder: (context) => [
-                        const PopupMenuItem(child: ListingCard(),
-                        ),
+                        PopupMenuItem(child: ListingCard(document: result)),
                       ],
                     )
                 ),
