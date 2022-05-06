@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
+import 'package:house_hunter/search.dart';
+import 'package:provider/provider.dart';
 
 class SearchFilters extends StatefulWidget {
   const SearchFilters({Key? key}) : super(key: key);
@@ -13,14 +15,22 @@ class _SearchFilters extends State<SearchFilters> {
   List<int> baths = [for (var i = 1; i <= 4; i++) i];
   RangeValues priceRange = const RangeValues(0, 10000);
 
-  List<int> selectedRooms = [0, 1, 2];
-  int selectedBaths = 2;
-  RangeValues selectedPriceRange = const RangeValues(0, 5000);
+  RangeValues selectedPriceRange = const RangeValues(0, 10000);
+  GroupButtonController roomController = GroupButtonController();
+  GroupButtonController bathController = GroupButtonController();
+  late Search search;
+
+  @override
+  void initState() {
+    super.initState();
+    search = Provider.of<Search>(context, listen: false);
+    roomController.selectIndexes(search.rooms);
+    bathController.selectIndex(search.baths);
+    selectedPriceRange = search.priceRange;
+  }
 
   @override
   Widget build(BuildContext context) {
-    GroupButtonController roomController = GroupButtonController(selectedIndexes: selectedRooms);
-    GroupButtonController bathController = GroupButtonController(selectedIndex: selectedBaths);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
@@ -39,9 +49,7 @@ class _SearchFilters extends State<SearchFilters> {
               divisions: 1000,
               values: selectedPriceRange,
               onChanged: (RangeValues newRange) {
-                setState(() {
-                  selectedPriceRange = newRange;
-                });
+                setState(() => selectedPriceRange = newRange);
               }
           ),
           const Text("No. of Rooms", style: TextStyle(fontSize: 20)),
@@ -51,11 +59,7 @@ class _SearchFilters extends State<SearchFilters> {
               controller: roomController,
               isRadio: false,
               buttons: rooms,
-              options: const GroupButtonOptions(
-                runSpacing: 0,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                unselectedColor: Colors.black38,
-              ),
+              options: groupButtonOptions(),
             ),
           ),
           const Text("No. of Baths", style: TextStyle(fontSize: 20)),
@@ -65,16 +69,61 @@ class _SearchFilters extends State<SearchFilters> {
               controller: bathController,
               isRadio: true,
               buttons: baths.map((item) => item.toString() + "+").toList(),
-              options: const GroupButtonOptions(
-                runSpacing: 0,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                unselectedColor: Colors.black38,
-              ),
+              options: groupButtonOptions(),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  style: buttonStyle(),
+                  onPressed: () => updateFilters(context),
+                  child: Text("Search", style: TextStyle(fontSize: 16))
+              ),
+              SizedBox(width: 20),
+              ElevatedButton(
+                  style: buttonStyle(),
+                  onPressed: () => resetFilters(),
+                  child: Text("Clear", style: TextStyle(fontSize: 16))
+              )
+            ],
+          )
         ],
       ),
     );
   }
 
+  void updateFilters(BuildContext context) {
+    search.updateFilters(
+        roomController.selectedIndexes.toList(),
+        bathController.selectedIndex ?? 0,
+        selectedPriceRange
+    );
+    Navigator.pop(context);
+  }
+
+  void resetFilters() {
+    setState(() {
+      roomController.unselectAll();
+      bathController.selectIndex(0);
+      selectedPriceRange = RangeValues(0, 10000);
+    });
+    search.clearFilters();
+  }
+
+  ButtonStyle buttonStyle() {
+    return ElevatedButton.styleFrom(
+        fixedSize: Size(120, 60),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))
+    );
+  }
+
+  GroupButtonOptions groupButtonOptions() {
+    return GroupButtonOptions(
+      runSpacing: 0,
+      borderRadius: BorderRadius.all(Radius.circular(20)),
+      unselectedColor: Colors.black38,
+    );
+  }
 }

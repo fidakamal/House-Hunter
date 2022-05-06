@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
@@ -8,6 +9,21 @@ class Search extends ChangeNotifier{
   final geo = Geoflutterfire();
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> results = <DocumentSnapshot>[];
+  List<int> rooms = [];
+  int baths = 0;
+  RangeValues priceRange = RangeValues(0, 10000);
+
+  void updateFilters(List<int> rooms, int baths, RangeValues priceRange) {
+    this.rooms = rooms;
+    this.baths = baths;
+    this.priceRange = priceRange;
+  }
+
+  void clearFilters() {
+    rooms = [];
+    baths = 0;
+    priceRange = RangeValues(0, 10000);
+  }
 
   void searchRentals(String searchLocation) async {
     GeoFirePoint geopoint = await getCoordinates(searchLocation);
