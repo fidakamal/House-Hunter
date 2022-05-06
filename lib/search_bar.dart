@@ -21,14 +21,14 @@ class SearchBar extends StatelessWidget {
             splashColor: Colors.grey,
             icon: const Icon(Icons.search),
             onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               Provider.of<Search>(context, listen: false).searchRentals(searchLocation);
             },
           ),
           Expanded(
             child: TextField(
-              onChanged: (value) {
-                searchLocation = value;
-              },
+              onSubmitted: (value) => Provider.of<Search>(context, listen: false).searchRentals(searchLocation),
+              onChanged: (value) => searchLocation = value,
               cursorColor: Colors.black,
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.go,
@@ -42,6 +42,7 @@ class SearchBar extends StatelessWidget {
             splashColor: Colors.grey,
             icon: const Icon(Icons.tune_rounded),
             onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               showMaterialModalBottomSheet<dynamic>(
                 expand: false,
                 context: context,
