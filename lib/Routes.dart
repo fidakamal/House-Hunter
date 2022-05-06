@@ -6,6 +6,7 @@ import 'package:house_hunter/search_bar.dart';
 import 'package:house_hunter/map.dart';
 import 'package:house_hunter/list_view.dart';
 import 'package:provider/provider.dart';
+import 'package:house_hunter/profile.dart';
 
 class Routes extends StatelessWidget {
   const Routes({Key? key}) : super(key: key);
@@ -36,7 +37,9 @@ class Routes extends StatelessWidget {
           return SafeArea(
               child: Listing(document: navigation.selectedDocument));
         case PageName.profile:
-          // TODO: Handle this case.
+          return SafeArea(
+            child: Profile(),
+          );
           break;
       }
       return Container();

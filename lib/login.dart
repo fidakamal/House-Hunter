@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:house_hunter/components/rounded_button.dart';
+import 'package:house_hunter/profile.dart';
 
-class Register extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
-  State<Register> createState() => _RegisterState();
+  State<Login> createState() => _LoginState();
 }
 
-class _RegisterState extends State<Register> {
+class _LoginState extends State<Login> {
   final _auth = FirebaseAuth.instance;
   late String email;
   late String password;
@@ -46,13 +47,13 @@ class _RegisterState extends State<Register> {
                 height: 24.0,
               ),
               RoundedButton(
-                title: "Register",
-                color: Colors.blueAccent,
+                title: "Login",
+                color: Colors.lightBlueAccent,
                 onPressed: () async {
                   try {
-                    final newUser = await _auth.createUserWithEmailAndPassword(
+                    final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
-                    if (newUser != null) {
+                    if (user != null) {
                       Navigator.pop(context, email);
                     }
                   } catch (e) {
