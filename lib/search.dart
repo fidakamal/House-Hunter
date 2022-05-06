@@ -41,9 +41,21 @@ class Search extends ChangeNotifier{
         .within(center: geopoint, radius: searchRadius, field: "location");
 
     stream.listen((List<DocumentSnapshot> documentList) {
-      results = documentList;
+      results = filterRentals(documentList);
       notifyListeners();
     });
+  }
+
+  List<DocumentSnapshot> filterRentals(List<DocumentSnapshot> rentals) {
+    if (rooms.isEmpty) {
+    rentals.removeWhere((doc) => doc["baths"] < baths + 1 || doc["rent"] < priceRange.start
+        || doc["rent"] > priceRange.end);
+    }
+    else {
+      rentals.removeWhere((doc) => doc["baths"] < baths + 1 || doc["rent"] < priceRange.start
+          || doc["rent"] > priceRange.end || !rooms.contains(doc["bedrooms"] - 1));
+    }
+    return rentals;
   }
 
   void addLocation() {
