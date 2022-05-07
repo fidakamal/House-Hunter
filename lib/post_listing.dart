@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 class PostListing extends StatefulWidget {
   const PostListing({Key? key}) : super(key: key);
@@ -9,6 +12,17 @@ class PostListing extends StatefulWidget {
 
 class _PostListingState extends State<PostListing> {
   List<int> dropdownOptions = [1, 2, 3, 4, 5];
+  late String buildingName, address, contactNo;
+  late int rent, beds, baths, squareFeet;
+  final _firestore = FirebaseFirestore.instance;
+  final geo = Geoflutterfire();
+
+  Future<GeoFirePoint> getGeopoint(address) async {
+    List<Location> coordinates = await locationFromAddress(address);
+    double latitude = coordinates[0].latitude;
+    double longitude = coordinates[0].longitude;
+    return geo.point(latitude: latitude, longitude: longitude);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +54,9 @@ class _PostListingState extends State<PostListing> {
                 ),
                 TextField(
                   style: TextStyle(fontSize: 16.0),
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    buildingName = value;
+                  },
                 ),
                 SizedBox(
                   height: 25.0,
@@ -53,8 +69,10 @@ class _PostListingState extends State<PostListing> {
                   ),
                 ),
                 TextField(
-                  style: TextStyle(fontSize: 17.0),
-                  onChanged: (value) {},
+                  style: TextStyle(fontSize: 16.0),
+                  onChanged: (value) {
+                    address = value;
+                  },
                 ),
                 SizedBox(
                   height: 25.0,
@@ -67,9 +85,11 @@ class _PostListingState extends State<PostListing> {
                   ),
                 ),
                 TextField(
-                  style: TextStyle(fontSize: 17.0),
+                  style: TextStyle(fontSize: 16.0),
                   keyboardType: TextInputType.number,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    rent = int.parse(value);
+                  },
                 ),
                 SizedBox(
                   height: 25.0,
@@ -90,7 +110,9 @@ class _PostListingState extends State<PostListing> {
                       ),
                     );
                   }).toList(),
-                  onChanged: (int? value) {},
+                  onChanged: (int? value) {
+                    beds = value!;
+                  },
                 ),
                 SizedBox(
                   height: 25.0,
@@ -111,7 +133,9 @@ class _PostListingState extends State<PostListing> {
                       ),
                     );
                   }).toList(),
-                  onChanged: (int? value) {},
+                  onChanged: (int? value) {
+                    baths = value!;
+                  },
                 ),
                 SizedBox(
                   height: 25.0,
@@ -124,9 +148,11 @@ class _PostListingState extends State<PostListing> {
                   ),
                 ),
                 TextField(
-                  style: TextStyle(fontSize: 17.0),
+                  style: TextStyle(fontSize: 16.0),
                   keyboardType: TextInputType.number,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    squareFeet = int.parse(value);
+                  },
                 ),
                 SizedBox(
                   height: 25.0,
@@ -139,9 +165,11 @@ class _PostListingState extends State<PostListing> {
                   ),
                 ),
                 TextField(
-                  style: TextStyle(fontSize: 17.0),
+                  style: TextStyle(fontSize: 16.0),
                   keyboardType: TextInputType.number,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    contactNo = value;
+                  },
                 ),
                 SizedBox(
                   height: 40.0,
@@ -150,9 +178,21 @@ class _PostListingState extends State<PostListing> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 100.0,
+                      width: 120.0,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          GeoFirePoint geopoint = await getGeopoint(address);
+                          _firestore.collection("rentals").add({
+                            "name": buildingName,
+                            "address": address,
+                            "rent": rent,
+                            "bedrooms": beds,
+                            "baths": baths,
+                            "size": squareFeet,
+                            "phone": contactNo,
+                            "location": geopoint.data,
+                          });
+                        },
                         child: Text(
                           "Post",
                           style: TextStyle(color: Colors.white, fontSize: 15.0),
@@ -161,10 +201,10 @@ class _PostListingState extends State<PostListing> {
                       ),
                     ),
                     SizedBox(
-                      width: 30.0,
+                      width: 35.0,
                     ),
                     SizedBox(
-                      width: 100.0,
+                      width: 120.0,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -191,8 +231,8 @@ var kButtonStyle = ButtonStyle(
   backgroundColor: MaterialStateProperty.all(Colors.blue[400]),
   padding: MaterialStateProperty.all<EdgeInsets>(
     EdgeInsets.only(
-      top: 12.0,
-      bottom: 12.0,
+      top: 14.0,
+      bottom: 14.0,
     ),
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
