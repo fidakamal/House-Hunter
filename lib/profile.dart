@@ -65,55 +65,170 @@ class LoggedInProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(40.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          StreamBuilder<QuerySnapshot>(
-            stream: _firestore
-                .collection("rentals")
-                .where("user", isEqualTo: userEmail)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.lightBlueAccent,
-                  ),
-                );
-              }
-              return Expanded(
-                child: ListView(
-                  children: snapshot.data!.docs.map((document) {
-                    return Container(
-                      child: Center(
-                        child: Text(document['name']),
-                      ),
-                    );
-                  }).toList(),
+      padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.apartment_sharp,
+                  size: 30.0,
                 ),
-              );
-            },
-          ),
-          RoundedButton(
-            title: "Post a listing",
-            color: Colors.lightBlueAccent,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PostListing()),
-              );
-            },
-          ),
-          RoundedButton(
-            title: "Log out",
-            color: Colors.blueAccent,
-            onPressed: () {
-              logout();
-            },
-          ),
-        ],
+                SizedBox(
+                  width: 5.0,
+                ),
+                Text(
+                  "My Properties",
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontFamily: "SignikaNegative",
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: _firestore
+                  .collection("rentals")
+                  .where("user", isEqualTo: userEmail)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.lightBlueAccent,
+                    ),
+                  );
+                }
+                final rentals = snapshot.data!.docs;
+                List<UserListingCard> cards = [];
+                for (var rental in rentals) {
+                  final card = UserListingCard(
+                      rent: rental.get("rent"),
+                      beds: rental.get("bedrooms"),
+                      name: rental.get("name"),
+                      address: rental.get("address"));
+                  cards.add(card);
+                }
+                return ListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: cards,
+                );
+              },
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            RoundedButton(
+              title: "Post a listing",
+              color: Colors.blue,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PostListing()),
+                );
+              },
+            ),
+            RoundedButton(
+              title: "Log out",
+              color: Colors.red.shade400,
+              onPressed: () {
+                logout();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UserListingCard extends StatelessWidget {
+  final int rent;
+  final int beds;
+  final String name;
+  final String address;
+
+  UserListingCard(
+      {required this.rent,
+      required this.beds,
+      required this.name,
+      required this.address});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+      child: InkWell(
+        onTap: () {},
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+                "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1170&fbclid=IwAR0olI3qR-ezelZl1zj4jV17Ud1me6DgBIw1jKBotiQmKOMgxg6nqpxTD6E"),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 4.0,
+                      bottom: 4.0,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.attach_money_rounded, size: 18),
+                        Text(
+                          rent.toString(),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(Icons.bed_rounded, size: 15),
+                        SizedBox(width: 3),
+                        Text(beds.toString() + " Beds"),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.apartment_rounded, size: 15),
+                      SizedBox(width: 2),
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, size: 15),
+                      SizedBox(width: 2),
+                      Text(
+                        address,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

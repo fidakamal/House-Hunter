@@ -208,6 +208,7 @@ class _PostListingState extends State<PostListing> {
                             "phone": contactNo,
                             "location": geopoint.data,
                           });
+                          Navigator.pop(context);
                         },
                         child: Text(
                           "Post",
