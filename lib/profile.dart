@@ -4,7 +4,7 @@ import 'package:house_hunter/register.dart';
 import 'package:house_hunter/components/rounded_button.dart';
 import 'package:house_hunter/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:house_hunter/post_listing.dart';
 
 final _auth = FirebaseAuth.instance;
 
@@ -14,7 +14,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  // final _firestore = FirebaseFirestore.instance;
   late User loggedInUser;
   String userEmail = "no user";
 
@@ -72,7 +71,12 @@ class LoggedInProfile extends StatelessWidget {
           RoundedButton(
             title: "Post a listing",
             color: Colors.lightBlueAccent,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PostListing()),
+              );
+            },
           ),
           RoundedButton(
             title: "Log out",
