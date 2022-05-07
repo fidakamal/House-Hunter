@@ -4,6 +4,7 @@ import 'package:house_hunter/Routes.dart';
 import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/search.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'profile.dart';
 import 'package:provider/provider.dart';
 import 'package:house_hunter/Navigation.dart';
 
