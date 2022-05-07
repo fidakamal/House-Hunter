@@ -4,7 +4,7 @@ import 'package:house_hunter/bottom_navigation.dart';
 
 class Navigation extends ChangeNotifier {
   PageName currentPage = PageName.map;
-  late DocumentSnapshot selectedDocument;
+  late DocumentSnapshot? selectedDocument = null;
 
   void updateCurrentPage (PageName newPage) {
     currentPage = newPage;
