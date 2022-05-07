@@ -142,7 +142,7 @@ class LoggedInProfile extends StatelessWidget {
             ),
             RoundedButton(
               title: "Log out",
-              color: Colors.redAccent,
+              color: Colors.red.shade400,
               onPressed: () {
                 logout();
               },

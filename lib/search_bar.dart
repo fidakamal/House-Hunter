@@ -33,11 +33,8 @@ class _SearchBar extends State<SearchBar> {
     if (Provider.of<Search>(context).loading) {
       return Container(
         margin: EdgeInsets.only(right: 15),
-        child: SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator()
-        ),
+        child:
+            SizedBox(height: 20, width: 20, child: CircularProgressIndicator()),
       );
     }
     if (textController.text != "") {
@@ -51,7 +48,8 @@ class _SearchBar extends State<SearchBar> {
 
   void search() {
     if (textController.text != "") {
-      Provider.of<Search>(context, listen: false).searchRentals(textController.text);
+      Provider.of<Search>(context, listen: false)
+          .searchRentals(textController.text);
     }
   }
 
@@ -66,10 +64,15 @@ class _SearchBar extends State<SearchBar> {
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.tune_rounded),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
-              search();
+              showMaterialModalBottomSheet<dynamic>(
+                expand: false,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => const SearchFilters(),
+              );
             },
           ),
           Expanded(
@@ -84,15 +87,10 @@ class _SearchBar extends State<SearchBar> {
           ),
           if (suffixButton() != null) suffixButton()!,
           IconButton(
-            icon: const Icon(Icons.tune_rounded),
+            icon: const Icon(Icons.search),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
-              showMaterialModalBottomSheet<dynamic>(
-                expand: false,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => const SearchFilters(),
-              );
+              search();
             },
           ),
         ],
