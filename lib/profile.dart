@@ -70,7 +70,6 @@ class LoggedInProfile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
@@ -107,6 +106,11 @@ class LoggedInProfile extends StatelessWidget {
                   );
                 }
                 final rentals = snapshot.data!.docs;
+                if (rentals.isEmpty) {
+                  return SizedBox(
+                    height: 220.0,
+                  );
+                }
                 List<UserListingCard> cards = [];
                 for (var rental in rentals) {
                   final card = UserListingCard(
@@ -128,7 +132,7 @@ class LoggedInProfile extends StatelessWidget {
             ),
             RoundedButton(
               title: "Post a listing",
-              color: Colors.blue,
+              color: Colors.lightBlueAccent.shade400,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -138,7 +142,7 @@ class LoggedInProfile extends StatelessWidget {
             ),
             RoundedButton(
               title: "Log out",
-              color: Colors.red.shade400,
+              color: Colors.redAccent,
               onPressed: () {
                 logout();
               },
