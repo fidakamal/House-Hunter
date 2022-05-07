@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PostListing extends StatefulWidget {
   const PostListing({Key? key}) : super(key: key);
@@ -16,12 +17,25 @@ class _PostListingState extends State<PostListing> {
   late int rent, beds, baths, squareFeet;
   final _firestore = FirebaseFirestore.instance;
   final geo = Geoflutterfire();
+  final _auth = FirebaseAuth.instance;
+  late User loggedInUser;
 
   Future<GeoFirePoint> getGeopoint(address) async {
     List<Location> coordinates = await locationFromAddress(address);
     double latitude = coordinates[0].latitude;
     double longitude = coordinates[0].longitude;
     return geo.point(latitude: latitude, longitude: longitude);
+  }
+
+  Future<void> getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -181,8 +195,10 @@ class _PostListingState extends State<PostListing> {
                       width: 120.0,
                       child: ElevatedButton(
                         onPressed: () async {
+                          getCurrentUser();
                           GeoFirePoint geopoint = await getGeopoint(address);
                           _firestore.collection("rentals").add({
+                            "user": loggedInUser.email,
                             "name": buildingName,
                             "address": address,
                             "rent": rent,

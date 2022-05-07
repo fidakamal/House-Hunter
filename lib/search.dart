@@ -5,8 +5,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:latlong2/latlong.dart';
 
-class Search extends ChangeNotifier{
-  double searchRadius = 5;
+class Search extends ChangeNotifier {
+  double searchRadius = 1;
   final geo = Geoflutterfire();
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> results = <DocumentSnapshot>[];
@@ -35,11 +35,10 @@ class Search extends ChangeNotifier{
 
   void searchRentals(String searchLocation) async {
     toggleLoading();
-    try{
+    try {
       GeoFirePoint geopoint = await getCoordinates(searchLocation);
       getNearbyRentals(geopoint);
-    }
-    catch(e) {
+    } catch (e) {
       print(e);
     }
     toggleLoading();
@@ -64,18 +63,23 @@ class Search extends ChangeNotifier{
 
   List<DocumentSnapshot> filterRentals(List<DocumentSnapshot> rentals) {
     if (rooms.isEmpty) {
-    rentals.removeWhere((doc) => doc["baths"] < baths + 1 || doc["rent"] < priceRange.start
-        || doc["rent"] > priceRange.end);
-    }
-    else {
-      rentals.removeWhere((doc) => doc["baths"] < baths + 1 || doc["rent"] < priceRange.start
-          || doc["rent"] > priceRange.end || !rooms.contains(doc["bedrooms"] - 1));
+      rentals.removeWhere((doc) =>
+          doc["baths"] < baths + 1 ||
+          doc["rent"] < priceRange.start ||
+          doc["rent"] > priceRange.end);
+    } else {
+      rentals.removeWhere((doc) =>
+          doc["baths"] < baths + 1 ||
+          doc["rent"] < priceRange.start ||
+          doc["rent"] > priceRange.end ||
+          !rooms.contains(doc["bedrooms"] - 1));
     }
     return rentals;
   }
 
   void addLocation() {
-    GeoFirePoint myLocation = geo.point(latitude: 23.752608, longitude: 90.3762569);
+    GeoFirePoint myLocation =
+        geo.point(latitude: 23.752608, longitude: 90.3762569);
     _firestore
         .collection('rentals')
         .add({'name': 'Hillside Place', 'location': myLocation.data});

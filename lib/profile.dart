@@ -5,8 +5,11 @@ import 'package:house_hunter/components/rounded_button.dart';
 import 'package:house_hunter/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:house_hunter/post_listing.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
+String userEmail = "no user";
 
 class Profile extends StatefulWidget {
   @override
@@ -15,7 +18,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late User loggedInUser;
-  String userEmail = "no user";
 
   void setUser(String email) {
     setState(() {
@@ -68,6 +70,32 @@ class LoggedInProfile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          StreamBuilder<QuerySnapshot>(
+            stream: _firestore
+                .collection("rentals")
+                .where("user", isEqualTo: userEmail)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.lightBlueAccent,
+                  ),
+                );
+              }
+              return Expanded(
+                child: ListView(
+                  children: snapshot.data!.docs.map((document) {
+                    return Container(
+                      child: Center(
+                        child: Text(document['name']),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          ),
           RoundedButton(
             title: "Post a listing",
             color: Colors.lightBlueAccent,

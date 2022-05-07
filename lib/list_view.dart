@@ -12,8 +12,6 @@ class ResultsListView extends StatefulWidget {
 }
 
 class _ResultsListViewState extends State<ResultsListView> {
-  //Stream<List<DocumentSnapshot>> rentals = Search.searchResultsStream;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<Search>(builder: (context, search, child) {
@@ -30,8 +28,10 @@ class _ResultsListViewState extends State<ResultsListView> {
                 margin: EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () {
-                    Provider.of<Navigation>(context, listen: false).updateSelectedDocument(rental);
-                    Provider.of<Navigation>(context, listen: false).updateCurrentPage(PageName.result);
+                    Provider.of<Navigation>(context, listen: false)
+                        .updateSelectedDocument(rental);
+                    Provider.of<Navigation>(context, listen: false)
+                        .updateCurrentPage(PageName.result);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
