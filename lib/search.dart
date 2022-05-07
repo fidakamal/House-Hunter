@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:latlong2/latlong.dart';
 
 class Search extends ChangeNotifier{
   double searchRadius = 5;
@@ -13,6 +14,7 @@ class Search extends ChangeNotifier{
   int baths = 0;
   RangeValues priceRange = RangeValues(0, 10000);
   bool loading = false;
+  LatLng center = LatLng(23.7937, 90.4066);
 
   void toggleLoading() {
     loading = !loading;
@@ -55,6 +57,7 @@ class Search extends ChangeNotifier{
 
     stream.listen((List<DocumentSnapshot> documentList) {
       results = filterRentals(documentList);
+      center = LatLng(geopoint.latitude, geopoint.longitude);
       notifyListeners();
     });
   }

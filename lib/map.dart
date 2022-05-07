@@ -9,16 +9,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 class Map extends StatelessWidget {
-  const Map({Key? key,}) : super(key: key);
+  Map({Key? key,}) : super(key: key);
   final Offset popupOffset = const Offset(0, -120);
+  final MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<Search>(
         builder: (context, search, child) {
+          mapController.onReady.then((value) => mapController.moveAndRotate(search.center, 15.0, 0.0));
           return FlutterMap(
+            mapController: mapController,
             options: MapOptions(
-              center: LatLng(23.7937, 90.4066),
+              center: search.center,
               zoom: 13.0,
             ),
             layers: [
