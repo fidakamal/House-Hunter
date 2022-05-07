@@ -29,7 +29,17 @@ class _SearchBar extends State<SearchBar> {
     textController.dispose();
   }
 
-  IconButton? suffixButton() {
+  Widget? suffixButton() {
+    if (Provider.of<Search>(context).loading) {
+      return Container(
+        margin: EdgeInsets.only(right: 15),
+        child: SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator()
+        ),
+      );
+    }
     if (textController.text != "") {
       return IconButton(
         icon: const Icon(Icons.clear),
@@ -37,6 +47,12 @@ class _SearchBar extends State<SearchBar> {
       );
     }
     return null;
+  }
+
+  void search() {
+    if (textController.text != "") {
+      Provider.of<Search>(context, listen: false).searchRentals(textController.text);
+    }
   }
 
   @override
@@ -53,13 +69,13 @@ class _SearchBar extends State<SearchBar> {
             icon: const Icon(Icons.search),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
-              Provider.of<Search>(context, listen: false).searchRentals(textController.text);
+              search();
             },
           ),
           Expanded(
             child: TextField(
               controller: textController,
-              onSubmitted: (value) => Provider.of<Search>(context, listen: false).searchRentals(textController.text),
+              onSubmitted: (value) => search(),
               decoration: InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 15),

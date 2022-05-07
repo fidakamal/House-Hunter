@@ -12,6 +12,12 @@ class Search extends ChangeNotifier{
   List<int> rooms = [];
   int baths = 0;
   RangeValues priceRange = RangeValues(0, 10000);
+  bool loading = false;
+
+  void toggleLoading() {
+    loading = !loading;
+    notifyListeners();
+  }
 
   void updateFilters(List<int> rooms, int baths, RangeValues priceRange) {
     this.rooms = rooms;
@@ -26,8 +32,15 @@ class Search extends ChangeNotifier{
   }
 
   void searchRentals(String searchLocation) async {
-    GeoFirePoint geopoint = await getCoordinates(searchLocation);
-    getNearbyRentals(geopoint);
+    toggleLoading();
+    try{
+      GeoFirePoint geopoint = await getCoordinates(searchLocation);
+      getNearbyRentals(geopoint);
+    }
+    catch(e) {
+      print(e);
+    }
+    toggleLoading();
   }
 
   Future<GeoFirePoint> getCoordinates(String searchLocation) async {
