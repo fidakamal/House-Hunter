@@ -4,23 +4,18 @@ import 'package:house_hunter/Routes.dart';
 import 'package:house_hunter/bottom_navigation.dart';
 import 'package:house_hunter/search.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'profile.dart';
 import 'package:provider/provider.dart';
 import 'package:house_hunter/Navigation.dart';
+import 'package:house_hunter/floating_button.dart';
 
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(
-      MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => Search()),
-            ChangeNotifierProvider(create: (context) => Navigation())
-          ],
-          child: const MyApp()
-      )
-  );
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => Search()),
+    ChangeNotifierProvider(create: (context) => Navigation())
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -52,6 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Routes(),
       bottomNavigationBar: BottomNavigation(),
+      floatingActionButton:
+          (Provider.of<Navigation>(context).currentPage == PageName.map)
+              ? FloatingButton()
+              : null,
     );
   }
 }

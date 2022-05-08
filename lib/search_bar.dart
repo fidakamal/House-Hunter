@@ -47,12 +47,14 @@ class _SearchBar extends State<SearchBar> {
   }
 
   void search() {
-    Provider.of<Search>(context, listen: false).searchRentals(textController.text);
+    Provider.of<Search>(context, listen: false)
+        .searchRentals(textController.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(left: 5.0, right: 5.0),
       margin: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,

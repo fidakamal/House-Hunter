@@ -132,7 +132,7 @@ class LoggedInProfile extends StatelessWidget {
             ),
             RoundedButton(
               title: "Post a listing",
-              color: Colors.lightBlueAccent.shade400,
+              color: Colors.cyanAccent.shade700,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -142,7 +142,7 @@ class LoggedInProfile extends StatelessWidget {
             ),
             RoundedButton(
               title: "Log out",
-              color: Colors.red.shade400,
+              color: Colors.redAccent,
               onPressed: () {
                 logout();
               },
