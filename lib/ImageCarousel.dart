@@ -7,26 +7,31 @@ class ImageCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(
-      options: CarouselOptions(height: 300.0),
-      items: images.map((image) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Container(
-                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                child: Image.network(
+    if (images.length != 0) {
+      return CarouselSlider(
+        options: CarouselOptions(height: 300.0),
+        items: images.map((image) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Image.network(
                     image,
                     fit: BoxFit.cover,
-                  loadingBuilder: (context, widget, loadingProgress) {
+                    loadingBuilder: (context, widget, loadingProgress) {
                       if (loadingProgress == null)  return widget;
                       return LoadingIndicator();
-                  },
-                )
-            );
-          },
-        );
-      }).toList(),
-    );
+                    },
+                  )
+              );
+            },
+          );
+        }).toList(),
+      );
+    }
+    else {
+      return Image.asset("assets/images/default.png");
+    }
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,18 +13,71 @@ class ResultsListView extends StatefulWidget {
 }
 
 class _ResultsListViewState extends State<ResultsListView> {
+  List<String> images = [];
+  List<DocumentSnapshot> docs = [];
+  bool loadingImages = false;
+
+  void getImages() async {
+    if (docs.isEmpty) return;
+
+    Future.delayed(Duration.zero, () async {
+      setState(() {
+        images = [];
+        loadingImages = true;
+      });
+    });
+
+    final storage = FirebaseStorage.instance.ref();
+    List<String> imageUrls = [];
+    for (var doc in docs) {
+      ListResult images = await storage.child("/rentalImages/${doc.id}").listAll();
+      if (images.items.isEmpty) {
+        imageUrls.add("");
+      } else {
+        String url = await images.items[0].getDownloadURL();
+        imageUrls.add(url);
+      }
+    }
+
+    setState(() {
+      images = imageUrls;
+      loadingImages = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Search>(builder: (context, search, child) {
+      if (search.results != docs) {
+        docs = search.results;
+        getImages();
+      }
+
+      // TODO show dialog if search.results.length == 0
+
+      if (loadingImages) {
+        return Expanded(
+          child: const Center(
+            child: SizedBox(
+              height: 100,
+              width: 100,
+              child: CircularProgressIndicator(
+                strokeWidth: 10,
+              ),
+            ),
+          ),
+        );
+      }
+
       return Expanded(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: search.results.length,
+            itemCount: docs.length,
             itemBuilder: (context, index) {
-              DocumentSnapshot rental = search.results[index];
+              DocumentSnapshot rental = docs[index];
               return Card(
                 margin: EdgeInsets.all(8.0),
                 child: InkWell(
@@ -36,8 +90,8 @@ class _ResultsListViewState extends State<ResultsListView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                          "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1170&fbclid=IwAR0olI3qR-ezelZl1zj4jV17Ud1me6DgBIw1jKBotiQmKOMgxg6nqpxTD6E"),
+                      if (images[index] == "")  Image.asset("assets/images/default.png")
+                      else  Image.network(images[index]),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
