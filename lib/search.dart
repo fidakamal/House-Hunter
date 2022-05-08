@@ -47,6 +47,17 @@ class Search extends ChangeNotifier {
     toggleLoading();
   }
 
+  void seachRentals(double latitude, double longitude) async {
+    toggleLoading();
+    try {
+      GeoFirePoint geopoint = GeoFirePoint(latitude, longitude);
+      getNearbyRentals(geopoint);
+    } catch (e) {
+      print(e);
+    }
+    toggleLoading();
+  }
+
   Future<GeoFirePoint> getCoordinates(String searchLocation) async {
     List<Location> coordinates = await locationFromAddress(searchLocation);
     return GeoFirePoint(coordinates[0].latitude, coordinates[0].longitude);
