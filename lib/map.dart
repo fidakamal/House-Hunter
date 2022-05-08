@@ -8,20 +8,32 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
-class Map extends StatelessWidget {
+class Map extends StatefulWidget {
   Map({Key? key,}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _Map();
+}
+
+class _Map extends State<Map> {
   final Offset popupOffset = const Offset(0, -120);
   final MapController mapController = MapController();
+  bool mapReady = false;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<Search>(
         builder: (context, search, child) {
-          mapController.onReady.then((value) => mapController.moveAndRotate(search.center, 15.0, 0.0));
+          if (mapReady && mapController.center != search.center) {
+            mapController.moveAndRotate(search.center, 15.0, 0.0);
+          }
+          mapController.onReady.then((value) {
+            if (!mapReady) setState(() => mapReady = true);
+          });
           return FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              center: search.center,
+              center: LatLng(23.7937, 90.4066),
               zoom: 13.0,
             ),
             layers: [
