@@ -4,7 +4,7 @@ import 'package:house_hunter/register.dart';
 import 'package:house_hunter/components/rounded_button.dart';
 import 'package:house_hunter/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:house_hunter/post_listing.dart';
+import 'package:house_hunter/post_listing/post_listing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _auth = FirebaseAuth.instance;
