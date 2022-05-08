@@ -100,6 +100,7 @@ class _SearchFilters extends State<SearchFilters> {
         selectedPriceRange
     );
     Navigator.pop(context);
+    search.searchRentals(search.lastSearch);
   }
 
   void resetFilters() {

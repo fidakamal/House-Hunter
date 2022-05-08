@@ -47,10 +47,7 @@ class _SearchBar extends State<SearchBar> {
   }
 
   void search() {
-    if (textController.text != "") {
-      Provider.of<Search>(context, listen: false)
-          .searchRentals(textController.text);
-    }
+    Provider.of<Search>(context, listen: false).searchRentals(textController.text);
   }
 
   @override

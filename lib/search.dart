@@ -15,6 +15,7 @@ class Search extends ChangeNotifier {
   RangeValues priceRange = RangeValues(0, 10000);
   bool loading = false;
   LatLng center = LatLng(23.7937, 90.4066);
+  String lastSearch = "";
 
   void toggleLoading() {
     loading = !loading;
@@ -34,9 +35,11 @@ class Search extends ChangeNotifier {
   }
 
   void searchRentals(String searchLocation) async {
+    if (searchLocation == "") return;
     toggleLoading();
     try {
       GeoFirePoint geopoint = await getCoordinates(searchLocation);
+      lastSearch = searchLocation;
       getNearbyRentals(geopoint);
     } catch (e) {
       print(e);
