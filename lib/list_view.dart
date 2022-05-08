@@ -82,12 +82,7 @@ class _ResultsListViewState extends State<ResultsListView> {
                               children: [
                                 Icon(Icons.location_on, size: 15),
                                 SizedBox(width: 2),
-                                Text(
-                                  rental["address"],
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
+                                Flexible(child: Text(rental["address"], style: TextStyle(fontSize: 15)))
                               ],
                             ),
                           ],
