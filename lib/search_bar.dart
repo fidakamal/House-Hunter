@@ -5,7 +5,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({Key? key}) : super(key: key);
+  SearchBar({Key? key, required this.textController}) : super(key: key);
+  TextEditingController textController;
 
   @override
   State<StatefulWidget> createState() => _SearchBar();
@@ -13,20 +14,13 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBar extends State<SearchBar> {
   String searchLocation = '';
-  TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    textController.addListener(() {
+    widget.textController.addListener(() {
       setState(() {});
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    textController.dispose();
   }
 
   Widget? suffixButton() {
@@ -37,13 +31,13 @@ class _SearchBar extends State<SearchBar> {
             SizedBox(height: 20, width: 20, child: CircularProgressIndicator()),
       );
     }
-    if (textController.text != "") {
+    if (widget.textController.text != "") {
       return IconButton(
         icon: const Icon(
           Icons.clear,
           size: 20.0,
         ),
-        onPressed: () => textController.text = "",
+        onPressed: () => widget.textController.text = "",
       );
     }
     return null;
@@ -51,7 +45,7 @@ class _SearchBar extends State<SearchBar> {
 
   void search() {
     Provider.of<Search>(context, listen: false)
-        .searchRentals(textController.text);
+        .searchRentals(widget.textController.text);
   }
 
   @override
@@ -82,7 +76,7 @@ class _SearchBar extends State<SearchBar> {
           ),
           Expanded(
             child: TextField(
-              controller: textController,
+              controller: widget.textController,
               onSubmitted: (value) => search(),
               decoration: InputDecoration(
                   border: InputBorder.none,

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_hunter/Navigation.dart';
 import 'package:house_hunter/listing.dart';
@@ -8,15 +7,27 @@ import 'package:house_hunter/list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:house_hunter/profile/profile.dart';
 
-class Routes extends StatelessWidget {
-  const Routes({Key? key}) : super(key: key);
+class Routes extends StatefulWidget {
+  Routes({Key? key}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _Routes();
+}
+
+class _Routes extends State<Routes> {
+  TextEditingController textController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    textController.dispose();
+  }
 
   Widget mapPage() {
     return Stack(
       children: [
         Map(),
         SafeArea(
-          child: SearchBar(),
+          child: SearchBar(textController: textController),
         ),
       ],
     );
@@ -26,7 +37,7 @@ class Routes extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          SearchBar(),
+          SearchBar(textController: textController),
           ResultsListView(),
         ],
       ),
