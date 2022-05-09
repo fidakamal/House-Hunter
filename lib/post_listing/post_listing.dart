@@ -75,17 +75,31 @@ class _PostListingState extends State<PostListing> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0, bottom: 10.0),
+          padding: const EdgeInsets.only(
+              left: 30.0, right: 30.0, top: 20.0, bottom: 10.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
-                Text(
-                  "Post a Listing",
-                  style: TextStyle(fontSize: 30.0, fontFamily: "SignikaNegative"),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.launch,
+                      size: 28.0,
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Text(
+                      "Post a Listing",
+                      style: TextStyle(
+                          fontSize: 30.0, fontFamily: "SignikaNegative"),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 30.0,),
+                SizedBox(
+                  height: 30.0,
+                ),
                 fieldLabel("Name of Apartment Building"),
                 TextField(
                   style: TextStyle(fontSize: 16.0),
@@ -140,24 +154,31 @@ class _PostListingState extends State<PostListing> {
                   keyboardType: TextInputType.number,
                   onChanged: (value) => contactNo = value,
                 ),
-                SizedBox(height: 25.0),
-                if (images.isEmpty) Container(
-        margin: EdgeInsets.only(bottom: 40),
-                  child: Center(
-                    child: SizedBox(
-                      width: 120.0,
-                      child: ElevatedButton(
-                        onPressed: () => addImages(),
-                        child: Text("Add Images", style: TextStyle(color: Colors.white, fontSize: 15.0)),
-                        style: kButtonStyle,
+                SizedBox(height: 30.0),
+                if (images.isEmpty)
+                  Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    child: Center(
+                      child: SizedBox(
+                        width: 250.0,
+                        child: ElevatedButton(
+                          onPressed: () => addImages(),
+                          child: Text("Add Images",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 15.0)),
+                          style: kImageButtonStyle,
+                        ),
                       ),
                     ),
+                  )
+                else
+                  ImageCarousel(
+                    images: images,
+                    removeImage: (index) => removeImage(index),
+                    insertImage: () => addImages(),
                   ),
-                )
-                else ImageCarousel(
-                  images: images,
-                  removeImage: (index) => removeImage(index),
-                  insertImage: () => addImages(),
+                SizedBox(
+                  height: 10.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +203,7 @@ class _PostListingState extends State<PostListing> {
                           "Cancel",
                           style: TextStyle(color: Colors.white, fontSize: 15.0),
                         ),
-                        style: kButtonStyle,
+                        style: kCancelButtonStyle,
                       ),
                     ),
                   ],
@@ -198,18 +219,36 @@ class _PostListingState extends State<PostListing> {
 }
 
 Text fieldLabel(String text) {
-  return Text(
-      text,
-      style: TextStyle(color: Colors.black45, fontWeight: FontWeight.w400)
-  );
+  return Text(text,
+      style: TextStyle(color: Colors.black45, fontWeight: FontWeight.w400));
 }
 
 var kButtonStyle = ButtonStyle(
-  backgroundColor: MaterialStateProperty.all(Colors.blue[400]),
+  backgroundColor: MaterialStateProperty.all(Colors.indigo[400]),
   padding: MaterialStateProperty.all<EdgeInsets>(
     EdgeInsets.only(top: 14.0, bottom: 14.0),
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+  ),
+);
+
+var kCancelButtonStyle = ButtonStyle(
+  backgroundColor: MaterialStateProperty.all(Colors.indigo[300]),
+  padding: MaterialStateProperty.all<EdgeInsets>(
+    EdgeInsets.only(top: 14.0, bottom: 14.0),
+  ),
+  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+  ),
+);
+
+var kImageButtonStyle = ButtonStyle(
+  backgroundColor: MaterialStateProperty.all(Colors.cyanAccent[700]),
+  padding: MaterialStateProperty.all<EdgeInsets>(
+    EdgeInsets.only(top: 8.0, bottom: 8.0),
+  ),
+  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
   ),
 );

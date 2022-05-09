@@ -12,26 +12,42 @@ class BottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<Navigation>(builder: (context, navigation, child) {
       return Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(0.0),
         child: SalomonBottomBar(
           currentIndex: navigation.currentPage.index,
           onTap: (i) => navigation.updateCurrentPage(PageName.values[i]),
           items: [
             SalomonBottomBarItem(
-              icon: const Icon(Icons.map_rounded),
+              icon: const Icon(
+                Icons.map_rounded,
+                size: 25.0,
+              ),
               title: const Text("Map"),
+              selectedColor: Colors.cyan[400],
             ),
             SalomonBottomBarItem(
-              icon: const Icon(Icons.format_list_bulleted_rounded),
+              icon: const Icon(
+                Icons.format_list_bulleted_rounded,
+                size: 25.0,
+              ),
               title: const Text("List"),
+              selectedColor: Colors.cyan[400],
             ),
             SalomonBottomBarItem(
-              icon: const Icon(Icons.house_rounded),
+              icon: const Icon(
+                Icons.apartment_rounded,
+                size: 25.0,
+              ),
               title: const Text("Result"),
+              selectedColor: Colors.cyan[400],
             ),
             SalomonBottomBarItem(
-              icon: const Icon(Icons.person_rounded),
+              icon: const Icon(
+                Icons.account_circle_rounded,
+                size: 25.0,
+              ),
               title: const Text("Profile"),
+              selectedColor: Colors.cyan[400],
             ),
           ],
         ),

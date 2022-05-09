@@ -74,8 +74,8 @@ class LoggedInProfile extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.apartment_sharp,
-                  size: 30.0,
+                  Icons.home_rounded,
+                  size: 35.0,
                 ),
                 SizedBox(
                   width: 5.0,
@@ -142,7 +142,7 @@ class LoggedInProfile extends StatelessWidget {
             ),
             RoundedButton(
               title: "Log out",
-              color: Colors.redAccent,
+              color: Colors.red.shade300,
               onPressed: () {
                 logout();
               },

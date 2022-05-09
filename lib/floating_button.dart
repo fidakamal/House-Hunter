@@ -10,7 +10,7 @@ class FloatingButton extends StatelessWidget {
 
   void getLocation(BuildContext context) async {
     bool locationEnabled = await Geolocator.isLocationServiceEnabled();
-    if(!locationEnabled) {
+    if (!locationEnabled) {
       locationEnabled = await location.requestService();
       if (!locationEnabled) return;
     }
@@ -18,11 +18,12 @@ class FloatingButton extends StatelessWidget {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied)  return;
+      if (permission == LocationPermission.denied) return;
     }
 
     Position position = await Geolocator.getCurrentPosition();
-    Provider.of<Search>(context, listen: false).seachRentals(position.latitude, position.longitude);
+    Provider.of<Search>(context, listen: false)
+        .seachRentals(position.latitude, position.longitude);
   }
 
   @override
@@ -30,7 +31,7 @@ class FloatingButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () => getLocation(context),
       child: Icon(Icons.gps_fixed_rounded),
-      backgroundColor: Colors.cyanAccent[400],
+      backgroundColor: Colors.cyanAccent[700],
     );
   }
 }

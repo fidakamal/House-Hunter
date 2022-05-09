@@ -39,7 +39,10 @@ class _SearchBar extends State<SearchBar> {
     }
     if (textController.text != "") {
       return IconButton(
-        icon: const Icon(Icons.clear),
+        icon: const Icon(
+          Icons.clear,
+          size: 20.0,
+        ),
         onPressed: () => textController.text = "",
       );
     }
@@ -63,7 +66,10 @@ class _SearchBar extends State<SearchBar> {
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: const Icon(Icons.tune_rounded),
+            icon: const Icon(
+              Icons.tune_rounded,
+              size: 25.0,
+            ),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
               showMaterialModalBottomSheet<dynamic>(
@@ -86,7 +92,10 @@ class _SearchBar extends State<SearchBar> {
           ),
           if (suffixButton() != null) suffixButton()!,
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(
+              Icons.search_rounded,
+              size: 28.0,
+            ),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
               search();

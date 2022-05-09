@@ -51,9 +51,9 @@ class Map extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             offset: popupOffset,
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.location_pin,
-                              color: Colors.redAccent,
+                              color: Colors.red[400],
                               size: 30,
                             ),
                             itemBuilder: (context) => [
