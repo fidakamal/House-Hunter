@@ -6,12 +6,43 @@ import 'package:house_hunter/listing_card.dart';
 import 'package:house_hunter/search.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class Map extends StatelessWidget {
+class Map extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _Map();
+}
+
+class _Map extends State<Map> {
   final Offset popupOffset = const Offset(0, -120);
   final MapController mapController = MapController();
   bool mapReady = false;
+  bool storageReady = false;
+  late StorageCachingTileProvider cachingTileProvider;
+  String tileProvider = "https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=${dotenv.env['MAP_KEY'] ?? ""}";
+
+  void getCacheLocation() async {
+    var status = await Permission.storage.status;
+    if (status.isDenied) {
+      if (await Permission.storage.request().isGranted) {
+        Directory directory = await getApplicationDocumentsDirectory();
+        cachingTileProvider = StorageCachingTileProvider.fromMapCachingManager(
+            MapCachingManager(directory, "Default Store")
+        );
+        setState(() => storageReady = true);
+      }
+    }
+  }
+
+  @override
+  void iniState() {
+    super.initState();
+    getCacheLocation();
+  }
+
 
   void moveMap(LatLng center) {
     if (mapReady && mapController.center != center) {
@@ -58,8 +89,8 @@ class Map extends StatelessWidget {
         ),
         layers: [
           TileLayerOptions(
-            urlTemplate:
-                "https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=${dotenv.env['MAP_KEY'] ?? ""}",
+            urlTemplate: tileProvider,
+            tileProvider: storageReady ? cachingTileProvider : NonCachingNetworkTileProvider(),
           ),
           MarkerLayerOptions(
             rotate: true,

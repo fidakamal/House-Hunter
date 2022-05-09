@@ -99,12 +99,4 @@ class Search extends ChangeNotifier {
     }
     return rentals;
   }
-
-  void addLocation() {
-    GeoFirePoint myLocation =
-        geo.point(latitude: 23.752608, longitude: 90.3762569);
-    _firestore
-        .collection('rentals')
-        .add({'name': 'Hillside Place', 'location': myLocation.data});
-  }
 }
