@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
@@ -24,6 +25,7 @@ class _PostListingState extends State<PostListing> {
   late User loggedInUser;
   List<File> images = [];
   ImagePicker picker = ImagePicker();
+  final storage = FirebaseStorage.instance.ref();
 
   Future<GeoFirePoint> getGeopoint(address) async {
     List<Location> coordinates = await locationFromAddress(address);
@@ -42,9 +44,10 @@ class _PostListingState extends State<PostListing> {
   }
 
   void post() async {
+    Navigator.pop(context);
     getCurrentUser();
     GeoFirePoint geopoint = await getGeopoint(address);
-    _firestore.collection("rentals").add({
+    DocumentReference doc = await _firestore.collection("rentals").add({
       "user": loggedInUser.email,
       "name": buildingName,
       "address": address,
@@ -55,7 +58,9 @@ class _PostListingState extends State<PostListing> {
       "phone": contactNo,
       "location": geopoint.data,
     });
-    Navigator.pop(context);
+    for (var image in images) {
+      storage.child("/rentalImages/${doc.id}/${image.path.split("/").last}").putFile(image);
+    }
   }
 
   void addImages() async {
