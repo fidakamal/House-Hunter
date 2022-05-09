@@ -12,7 +12,7 @@ class Search extends ChangeNotifier {
   List<DocumentSnapshot> results = <DocumentSnapshot>[];
   List<int> rooms = [];
   int baths = 0;
-  RangeValues priceRange = RangeValues(0, 10000);
+  RangeValues priceRange = RangeValues(0, 100000);
   bool loading = false;
   LatLng center = LatLng(23.7937, 90.4066);
   String lastSearch = "";
@@ -31,7 +31,7 @@ class Search extends ChangeNotifier {
   void clearFilters() {
     rooms = [];
     baths = 0;
-    priceRange = RangeValues(0, 10000);
+    priceRange = RangeValues(0, 100000);
   }
 
   void clearSearch() {

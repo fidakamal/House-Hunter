@@ -13,9 +13,9 @@ class SearchFilters extends StatefulWidget {
 class _SearchFilters extends State<SearchFilters> {
   List<int> rooms = [for (var i = 1; i <= 5; i++) i];
   List<int> baths = [for (var i = 1; i <= 4; i++) i];
-  RangeValues priceRange = const RangeValues(0, 10000);
+  RangeValues priceRange = const RangeValues(0, 100000);
 
-  RangeValues selectedPriceRange = const RangeValues(0, 10000);
+  RangeValues selectedPriceRange = const RangeValues(0, 100000);
   GroupButtonController roomController = GroupButtonController();
   GroupButtonController bathController = GroupButtonController();
   late Search search;
@@ -46,7 +46,7 @@ class _SearchFilters extends State<SearchFilters> {
               labels: RangeLabels(selectedPriceRange.start.toStringAsFixed(0), selectedPriceRange.end.toStringAsFixed(0)),
               min: priceRange.start,
               max: priceRange.end,
-              divisions: 1000,
+              divisions: 10000,
               values: selectedPriceRange,
               onChanged: (RangeValues newRange) {
                 setState(() => selectedPriceRange = newRange);
@@ -107,7 +107,7 @@ class _SearchFilters extends State<SearchFilters> {
     setState(() {
       roomController.unselectAll();
       bathController.selectIndex(0);
-      selectedPriceRange = RangeValues(0, 10000);
+      selectedPriceRange = RangeValues(0, 100000);
     });
     search.clearFilters();
   }
