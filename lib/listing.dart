@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'ImageCarousel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Listing extends StatefulWidget {
   const Listing({Key? key}) : super(key: key);
@@ -118,9 +119,9 @@ class _Listing extends State<Listing> {
                   children: [
                     const Icon(Icons.phone_rounded, size: 25),
                     const SizedBox(width: 10),
-                    Flexible(
-                        child: Text(document!['phone'],
-                            style: const TextStyle(fontSize: 20)))
+                    Text(document!['phone'], style: const TextStyle(fontSize: 20)),
+                    const SizedBox(width: 10),
+                    CallButton(number: document!['phone'])
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -172,5 +173,30 @@ class _Listing extends State<Listing> {
         ]),
       );
     });
+  }
+}
+
+class CallButton extends StatelessWidget {
+  const CallButton({Key? key, required this.number}) : super(key: key);
+  final String number;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          primary: Colors.white,
+          backgroundColor: Colors.cyanAccent.shade700,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+      ),
+      onPressed: () => launchUrl(Uri(scheme: "tel", path: number)),
+      child: Row(
+        children: [
+          Icon(Icons.phone_rounded, size: 15),
+          const SizedBox(width: 5),
+          Text("Call"),
+        ],
+      ),
+    );
   }
 }
