@@ -5,7 +5,9 @@ import 'package:house_hunter/components/rounded_button.dart';
 import 'package:house_hunter/post_listing/post_listing.dart';
 
 class LoggedInProfile extends StatelessWidget {
-  const LoggedInProfile({Key? key, required this.logout, required this.userEmail}) : super(key: key);
+  const LoggedInProfile(
+      {Key? key, required this.logout, required this.userEmail})
+      : super(key: key);
   final Function logout;
   final String userEmail;
 
@@ -20,18 +22,21 @@ class LoggedInProfile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.home_rounded, size: 35.0),
-                SizedBox(width: 5.0),
+                Icon(Icons.maps_home_work_outlined, size: 35.0),
+                SizedBox(width: 7.0),
                 Text(
                   "My Properties",
-                  style: TextStyle(fontSize: 30.0, fontFamily: "SignikaNegative"),
+                  style:
+                      TextStyle(fontSize: 30.0, fontFamily: "SignikaNegative"),
                 ),
               ],
             ),
             SizedBox(height: 10.0),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection("rentals")
-                  .where("user", isEqualTo: userEmail).snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection("rentals")
+                  .where("user", isEqualTo: userEmail)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -41,11 +46,13 @@ class LoggedInProfile extends StatelessWidget {
                   );
                 }
                 final rentals = snapshot.data!.docs;
-                if (rentals.isEmpty)  return SizedBox(height: 220.0);
+                if (rentals.isEmpty) return SizedBox(height: 220.0);
                 return ListView(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  children: rentals.map((rental) => UserListingCard(doc: rental)).toList(),
+                  children: rentals
+                      .map((rental) => UserListingCard(doc: rental))
+                      .toList(),
                 );
               },
             ),

@@ -30,7 +30,8 @@ class _ResultsListViewState extends State<ResultsListView> {
     final storage = FirebaseStorage.instance.ref();
     List<String> imageUrls = [];
     for (var doc in docs) {
-      ListResult images = await storage.child("/rentalImages/${doc.id}").listAll();
+      ListResult images =
+          await storage.child("/rentalImages/${doc.id}").listAll();
       if (images.items.isEmpty) {
         imageUrls.add("");
       } else {
@@ -53,8 +54,6 @@ class _ResultsListViewState extends State<ResultsListView> {
         getImages();
       }
 
-      // TODO show dialog if search.results.length == 0
-
       if (loadingImages) {
         return Expanded(
           child: const Center(
@@ -69,75 +68,108 @@ class _ResultsListViewState extends State<ResultsListView> {
         );
       }
 
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot rental = docs[index];
-              return Card(
-                margin: EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: () {
-                    Provider.of<Navigation>(context, listen: false).updateSelectedDocument(rental);
-                    Provider.of<Navigation>(context, listen: false).updateCurrentPage(PageName.result);
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (images[index] == "")  Image.asset("assets/images/default.png")
-                      else  Image.network(images[index]),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
-                              child: Row(
+      if (docs.isEmpty) {
+        return Expanded(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 100.0, right: 100.0, top: 180.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.manage_search_rounded, size: 70),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    "Search an area to browse rentals in that area.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, height: 1.5),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: images.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot rental = docs[index];
+                return Card(
+                  margin: EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      Provider.of<Navigation>(context, listen: false)
+                          .updateSelectedDocument(rental);
+                      Provider.of<Navigation>(context, listen: false)
+                          .updateCurrentPage(PageName.result);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (images[index] == "")
+                          Image.asset("assets/images/default.png")
+                        else
+                          Image.network(images[index]),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.attach_money_rounded, size: 18),
+                                    Text(rental["rent"].toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(width: 20),
+                                    Icon(Icons.bed_rounded, size: 15),
+                                    SizedBox(width: 3),
+                                    Text(rental["bedrooms"].toString() +
+                                        " Beds"),
+                                  ],
+                                ),
+                              ),
+                              Row(
                                 children: [
-                                  Icon(Icons.attach_money_rounded, size: 18),
+                                  Icon(Icons.apartment_rounded, size: 15),
+                                  SizedBox(width: 2),
                                   Text(
-                                    rental["rent"].toString(),
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                                  SizedBox(width: 20),
-                                  Icon(Icons.bed_rounded, size: 15),
-                                  SizedBox(width: 3),
-                                  Text(rental["bedrooms"].toString() + " Beds"),
+                                    rental["name"],
+                                    style: TextStyle(fontSize: 15),
+                                  ),
                                 ],
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.apartment_rounded, size: 15),
-                                SizedBox(width: 2),
-                                Text(
-                                  rental["name"],
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.location_on, size: 15),
-                                SizedBox(width: 2),
-                                Flexible(child: Text(rental["address"], style: TextStyle(fontSize: 15)))
-                              ],
-                            ),
-                          ],
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on, size: 15),
+                                  SizedBox(width: 2),
+                                  Flexible(
+                                      child: Text(rental["address"],
+                                          style: TextStyle(fontSize: 15)))
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
   }
 }
