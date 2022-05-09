@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +99,7 @@ class _ResultsListViewState extends State<ResultsListView> {
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: images.length,
+              itemCount: min(images.length, docs.length),
               itemBuilder: (context, index) {
                 DocumentSnapshot rental = docs[index];
                 return Card(
