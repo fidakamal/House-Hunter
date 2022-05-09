@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:house_hunter/components/rounded_button.dart';
-import 'package:house_hunter/profile.dart';
 
 class Login extends StatefulWidget {
   @override

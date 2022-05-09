@@ -6,7 +6,7 @@ import 'package:house_hunter/search_bar.dart';
 import 'package:house_hunter/map.dart';
 import 'package:house_hunter/list_view.dart';
 import 'package:provider/provider.dart';
-import 'package:house_hunter/profile.dart';
+import 'package:house_hunter/profile/profile.dart';
 
 class Routes extends StatelessWidget {
   const Routes({Key? key}) : super(key: key);
