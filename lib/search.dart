@@ -44,7 +44,6 @@ class Search extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
-    toggleLoading();
   }
 
   void seachRentals(double latitude, double longitude) async {
@@ -55,7 +54,6 @@ class Search extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
-    toggleLoading();
   }
 
   Future<GeoFirePoint> getCoordinates(String searchLocation) async {
@@ -71,7 +69,7 @@ class Search extends ChangeNotifier {
     stream.listen((List<DocumentSnapshot> documentList) {
       results = filterRentals(documentList);
       center = LatLng(geopoint.latitude, geopoint.longitude);
-      notifyListeners();
+      toggleLoading();
     });
   }
 

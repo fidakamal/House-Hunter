@@ -19,9 +19,32 @@ class Map extends StatelessWidget {
     }
   }
 
+  void showError(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              backgroundColor: Colors.red.shade300,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              width: 250,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 2),
+              content: Text(
+                "No rentals found in this area",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15),
+              )
+          )
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Search>(builder: (context, search, child) {
+      if (search.lastSearch != "" && search.results.isEmpty && !search.loading) {
+        showError(context);
+      }
       moveMap(search.center);
       mapController.onReady.then((value) {
         if (!mapReady) mapReady = true;
