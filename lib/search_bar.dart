@@ -23,6 +23,11 @@ class _SearchBar extends State<SearchBar> {
     });
   }
 
+  void clearSearch() {
+    widget.textController.text = "";
+    Provider.of<Search>(context, listen: false).clearSearch();
+  }
+
   Widget? suffixButton() {
     if (Provider.of<Search>(context).loading) {
       return Container(
@@ -37,7 +42,7 @@ class _SearchBar extends State<SearchBar> {
           Icons.clear,
           size: 20.0,
         ),
-        onPressed: () => widget.textController.text = "",
+        onPressed: () => clearSearch(),
       );
     }
     return null;

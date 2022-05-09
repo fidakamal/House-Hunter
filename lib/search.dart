@@ -34,6 +34,12 @@ class Search extends ChangeNotifier {
     priceRange = RangeValues(0, 10000);
   }
 
+  void clearSearch() {
+    results = [];
+    lastSearch = "";
+    notifyListeners();
+  }
+
   void searchRentals(String searchLocation) async {
     if (searchLocation == "") return;
     toggleLoading();
