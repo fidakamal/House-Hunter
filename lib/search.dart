@@ -44,11 +44,16 @@ class Search extends ChangeNotifier {
     if (searchLocation == "") return;
     toggleLoading();
     try {
-      GeoFirePoint geopoint = await getCoordinates(searchLocation);
       lastSearch = searchLocation;
+      GeoFirePoint geopoint = await getCoordinates(searchLocation);
       getNearbyRentals(geopoint);
     } catch (e) {
       print(e);
+      await Future.delayed(Duration(seconds: 1)).then((value) {
+        results = [];
+        toggleLoading();
+        notifyListeners();
+      });
     }
   }
 

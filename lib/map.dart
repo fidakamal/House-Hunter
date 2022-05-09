@@ -42,7 +42,8 @@ class Map extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Search>(builder: (context, search, child) {
-      if (search.lastSearch != "" && search.results.isEmpty && !search.loading) {
+      if (search.lastSearch != "" && search.results.isEmpty && !search.loading
+          && Provider.of<Navigation>(context).currentPage == PageName.map) {
         showError(context);
       }
       moveMap(search.center);
