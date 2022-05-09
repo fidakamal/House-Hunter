@@ -1,16 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class UserListingCard extends StatefulWidget {
   UserListingCard({required this.doc});
   DocumentSnapshot doc;
-  final String imageUrl = "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=1170&fbclid=IwAR0olI3qR-ezelZl1zj4jV17Ud1me6DgBIw1jKBotiQmKOMgxg6nqpxTD6E";
 
   @override
   State<StatefulWidget> createState() => _UserListingCard();
 }
 
 class _UserListingCard extends State<UserListingCard> {
+  String image = "";
+  bool loadingImage = false;
+
+  void getImage() async {
+    Future.delayed(Duration.zero, () async {
+      setState(() {
+        image = "";
+        loadingImage = true;
+      });
+    });
+
+    final storage = FirebaseStorage.instance.ref();
+    String url = "";
+    ListResult images = await storage.child("/rentalImages/${widget.doc.id}").listAll();
+    if (images.items.isNotEmpty) {
+      url = await images.items[0].getDownloadURL();
+    }
+
+    setState(() {
+      image = url;
+      loadingImage = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getImage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +50,14 @@ class _UserListingCard extends State<UserListingCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.imageUrl == "")  Image.asset("assets/images/default.png")
-            else  Image.network(widget.imageUrl),
+            if (loadingImage) LoadingIndicator()
+            else if (image == "")  Image.asset("assets/images/default.png")
+            else  Container(
+                  constraints: BoxConstraints(maxHeight: 300),
+                  child: Center(
+                      child:Image.network(image)
+                  )
+              ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -68,6 +103,24 @@ class _UserListingCard extends State<UserListingCard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LoadingIndicator extends StatelessWidget {
+  const LoadingIndicator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: Center(
+          child: SizedBox(
+              width: 80,
+              height: 80,
+              child: CircularProgressIndicator(strokeWidth: 5)
+          )
       ),
     );
   }
