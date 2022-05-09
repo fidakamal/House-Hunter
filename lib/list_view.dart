@@ -70,7 +70,6 @@ class _ResultsListViewState extends State<ResultsListView> {
       }
 
       if (search.lastSearch == "" && docs.isEmpty) {
-        print(search.lastSearch);
         return Expanded(
           child: Padding(
             padding:
@@ -86,7 +85,8 @@ class _ResultsListViewState extends State<ResultsListView> {
                   Text(
                     "Search an area to browse rentals in that area.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, height: 1.5),
+                    style: TextStyle(
+                        fontSize: 16, height: 1.5, color: Colors.black54),
                   ),
                 ],
               ),
