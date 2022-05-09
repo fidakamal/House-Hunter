@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ListingCard extends StatelessWidget {
   const ListingCard({Key? key, required this.document}) : super(key: key);
@@ -16,7 +17,7 @@ class ListingCard extends StatelessWidget {
           const SizedBox(height: 5),
           Row(
             children: [
-              const Icon(Icons.attach_money_rounded),
+              SvgPicture.asset("assets/icons/taka.svg"),
               const SizedBox(width: 5),
               Text(document['rent'].toString()),
             ],

@@ -5,6 +5,7 @@ import 'package:house_hunter/bottom_navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'ImageCarousel.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Listing extends StatefulWidget {
   const Listing({Key? key}) : super(key: key);
@@ -135,7 +136,7 @@ class _Listing extends State<Listing> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    const Icon(Icons.attach_money_rounded, size: 25),
+                    SvgPicture.asset("assets/icons/taka.svg", height: 25, width: 25),
                     const SizedBox(width: 10),
                     Text(document!['rent'].toString(),
                         style: const TextStyle(fontSize: 20)),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class UserListingCard extends StatefulWidget {
   UserListingCard({required this.doc, required this.onTap});
@@ -68,7 +69,7 @@ class _UserListingCard extends State<UserListingCard> {
                     padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
                     child: Row(
                       children: [
-                        Icon(Icons.attach_money_rounded, size: 18),
+                        SvgPicture.asset("assets/icons/taka.svg", height: 18, width: 18),
                         Text(
                             widget.doc["rent"].toString(),
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
