@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:group_button/group_button.dart';
 import 'package:house_hunter/search.dart';
 import 'package:provider/provider.dart';
@@ -31,30 +32,60 @@ class _SearchFilters extends State<SearchFilters> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
-      ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text("Price Range", style: TextStyle(fontSize: 20)),
+          const Text(
+            "Price Range",
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: "SignikaNegative",
+                color: Colors.black54),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset("assets/icons/taka.svg", height: 15, width: 15),
+              Text(selectedPriceRange.start.toStringAsFixed(0).toString() +
+                  " - "),
+              SvgPicture.asset("assets/icons/taka.svg", height: 15, width: 15),
+              Text(selectedPriceRange.end.toStringAsFixed(0).toString()),
+            ],
+          ),
           RangeSlider(
-              labels: RangeLabels(selectedPriceRange.start.toStringAsFixed(0), selectedPriceRange.end.toStringAsFixed(0)),
+              activeColor: Colors.cyanAccent[700],
+              inactiveColor: Colors.cyan[100],
+              labels: RangeLabels(selectedPriceRange.start.toStringAsFixed(0),
+                  selectedPriceRange.end.toStringAsFixed(0)),
               min: priceRange.start,
               max: priceRange.end,
               divisions: 10000,
               values: selectedPriceRange,
               onChanged: (RangeValues newRange) {
                 setState(() => selectedPriceRange = newRange);
-              }
+              }),
+          SizedBox(
+            height: 20,
           ),
-          const Text("No. of Rooms", style: TextStyle(fontSize: 20)),
+          const Text(
+            "No. of Bedrooms",
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: "SignikaNegative",
+                color: Colors.black54),
+          ),
           Container(
-            padding: const EdgeInsets.only(bottom: 30, top: 10),
+            padding:
+                const EdgeInsets.only(bottom: 30, top: 10, left: 20, right: 20),
             child: GroupButton(
               controller: roomController,
               isRadio: false,
@@ -62,9 +93,16 @@ class _SearchFilters extends State<SearchFilters> {
               options: groupButtonOptions(),
             ),
           ),
-          const Text("No. of Baths", style: TextStyle(fontSize: 20)),
+          const Text(
+            "No. of Baths",
+            style: TextStyle(
+                fontSize: 20,
+                fontFamily: "SignikaNegative",
+                color: Colors.black54),
+          ),
           Container(
-            padding: const EdgeInsets.only(bottom: 30, top: 10),
+            padding:
+                const EdgeInsets.only(bottom: 30, top: 10, left: 20, right: 20),
             child: GroupButton(
               controller: bathController,
               isRadio: true,
@@ -72,21 +110,28 @@ class _SearchFilters extends State<SearchFilters> {
               options: groupButtonOptions(),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  style: buttonStyle(),
-                  onPressed: () => updateFilters(context),
-                  child: Text("Search", style: TextStyle(fontSize: 16))
-              ),
-              SizedBox(width: 20),
-              ElevatedButton(
-                  style: buttonStyle(),
-                  onPressed: () => resetFilters(),
-                  child: Text("Clear", style: TextStyle(fontSize: 16))
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton(
+                      style: buttonStyle(),
+                      onPressed: () => updateFilters(context),
+                      child: Text("Search", style: TextStyle(fontSize: 16))),
+                ),
+                SizedBox(width: 35),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton(
+                      style: buttonStyle(),
+                      onPressed: () => resetFilters(),
+                      child: Text("Clear", style: TextStyle(fontSize: 16))),
+                )
+              ],
+            ),
           )
         ],
       ),
@@ -94,11 +139,8 @@ class _SearchFilters extends State<SearchFilters> {
   }
 
   void updateFilters(BuildContext context) {
-    search.updateFilters(
-        roomController.selectedIndexes.toList(),
-        bathController.selectedIndex ?? 0,
-        selectedPriceRange
-    );
+    search.updateFilters(roomController.selectedIndexes.toList(),
+        bathController.selectedIndex ?? 0, selectedPriceRange);
     Navigator.pop(context);
     search.searchRentals(search.lastSearch);
   }
@@ -114,9 +156,10 @@ class _SearchFilters extends State<SearchFilters> {
 
   ButtonStyle buttonStyle() {
     return ElevatedButton.styleFrom(
-        fixedSize: Size(120, 60),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))
+      primary: Colors.cyanAccent[700],
+      //fixedSize: Size(120, 40),
+      padding: EdgeInsets.only(top: 16, bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
     );
   }
 
@@ -124,7 +167,8 @@ class _SearchFilters extends State<SearchFilters> {
     return GroupButtonOptions(
       runSpacing: 0,
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      unselectedColor: Colors.black38,
+      selectedColor: Colors.cyanAccent[700],
+      unselectedColor: Colors.grey[300],
     );
   }
 }
