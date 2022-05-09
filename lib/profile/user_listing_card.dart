@@ -3,8 +3,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class UserListingCard extends StatefulWidget {
-  UserListingCard({required this.doc});
+  UserListingCard({required this.doc, required this.onTap});
   DocumentSnapshot doc;
+  Function onTap;
 
   @override
   State<StatefulWidget> createState() => _UserListingCard();
@@ -46,7 +47,7 @@ class _UserListingCard extends State<UserListingCard> {
     return Card(
       margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: InkWell(
-        onTap: () {},
+        onTap: () => widget.onTap(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

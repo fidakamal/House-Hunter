@@ -50,9 +50,10 @@ class LoggedInProfile extends StatelessWidget {
                 return ListView(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  children: rentals
-                      .map((rental) => UserListingCard(doc: rental))
-                      .toList(),
+                  children: rentals.map((rental) => UserListingCard(
+                    doc: rental,
+                    onTap: () {},
+                  )).toList(),
                 );
               },
             ),
