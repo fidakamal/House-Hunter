@@ -68,7 +68,8 @@ class _ResultsListViewState extends State<ResultsListView> {
         );
       }
 
-      if (docs.isEmpty) {
+      if (search.lastSearch == "" && docs.isEmpty) {
+        print(search.lastSearch);
         return Expanded(
           child: Padding(
             padding:
@@ -89,6 +90,14 @@ class _ResultsListViewState extends State<ResultsListView> {
                 ],
               ),
             ),
+          ),
+        );
+      } else if (search.lastSearch != "" && docs.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Text(
+            "No rentals found in this area",
+            style: TextStyle(fontSize: 16.0, color: Colors.grey),
           ),
         );
       } else {
