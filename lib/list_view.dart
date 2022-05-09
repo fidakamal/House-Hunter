@@ -104,7 +104,7 @@ class _ResultsListViewState extends State<ResultsListView> {
       } else {
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,

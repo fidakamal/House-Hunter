@@ -10,14 +10,14 @@ class PreLoggedInProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(40.0),
+      padding: EdgeInsets.only(left: 40.0, right: 40.0, top: 50.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           RoundedButton(
             title: "Log In",
-            color: Colors.lightBlueAccent,
+            color: Colors.cyan.shade300,
             onPressed: () async {
               String userEmail = await Navigator.push(
                 context,
@@ -28,7 +28,7 @@ class PreLoggedInProfile extends StatelessWidget {
           ),
           RoundedButton(
             title: "Register",
-            color: Colors.blueAccent,
+            color: Colors.cyanAccent.shade700,
             onPressed: () async {
               String userEmail = await Navigator.push(
                 context,

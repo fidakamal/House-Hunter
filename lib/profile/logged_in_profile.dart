@@ -57,20 +57,26 @@ class LoggedInProfile extends StatelessWidget {
               },
             ),
             SizedBox(height: 10.0),
-            RoundedButton(
-              title: "Post a listing",
-              color: Colors.cyanAccent.shade700,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PostListing()),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: RoundedButton(
+                title: "Post a listing",
+                color: Colors.cyan.shade300,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PostListing()),
+                  );
+                },
+              ),
             ),
-            RoundedButton(
-              title: "Log out",
-              color: Colors.red.shade300,
-              onPressed: () => logout(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: RoundedButton(
+                title: "Log out",
+                color: Colors.cyanAccent.shade700,
+                onPressed: () => logout(),
+              ),
             ),
           ],
         ),

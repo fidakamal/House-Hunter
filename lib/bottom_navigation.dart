@@ -11,8 +11,9 @@ class BottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Navigation>(builder: (context, navigation, child) {
-      return Padding(
-        padding: const EdgeInsets.all(0.0),
+      return Container(
+        padding: const EdgeInsets.all(1.0),
+        color: Colors.white,
         child: SalomonBottomBar(
           currentIndex: navigation.currentPage.index,
           onTap: (i) => navigation.updateCurrentPage(PageName.values[i]),
