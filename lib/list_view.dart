@@ -75,17 +75,15 @@ class _ResultsListViewState extends State<ResultsListView> {
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: docs.length,
+            itemCount: images.length,
             itemBuilder: (context, index) {
               DocumentSnapshot rental = docs[index];
               return Card(
                 margin: EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () {
-                    Provider.of<Navigation>(context, listen: false)
-                        .updateSelectedDocument(rental);
-                    Provider.of<Navigation>(context, listen: false)
-                        .updateCurrentPage(PageName.result);
+                    Provider.of<Navigation>(context, listen: false).updateSelectedDocument(rental);
+                    Provider.of<Navigation>(context, listen: false).updateCurrentPage(PageName.result);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,22 +96,14 @@ class _ResultsListViewState extends State<ResultsListView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(
-                                top: 4.0,
-                                bottom: 4.0,
-                              ),
+                              padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
                               child: Row(
                                 children: [
                                   Icon(Icons.attach_money_rounded, size: 18),
                                   Text(
                                     rental["rent"].toString(),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                  SizedBox(width: 20),
                                   Icon(Icons.bed_rounded, size: 15),
                                   SizedBox(width: 3),
                                   Text(rental["bedrooms"].toString() + " Beds"),
@@ -126,9 +116,7 @@ class _ResultsListViewState extends State<ResultsListView> {
                                 SizedBox(width: 2),
                                 Text(
                                   rental["name"],
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                               ],
                             ),
