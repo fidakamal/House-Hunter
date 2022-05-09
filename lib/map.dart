@@ -16,7 +16,7 @@ class Map extends StatefulWidget {
   State<StatefulWidget> createState() => _Map();
 }
 
-class _Map extends State<Map> {
+class _Map extends State<Map> with TickerProviderStateMixin {
   final Offset popupOffset = const Offset(0, -120);
   final MapController mapController = MapController();
   bool mapReady = false;
@@ -46,7 +46,25 @@ class _Map extends State<Map> {
 
   void moveMap(LatLng center) {
     if (mapReady && mapController.center != center) {
-      mapController.moveAndRotate(center, 15.0, 0.0);
+      Tween<double> latTween = Tween(begin: mapController.center.latitude, end: center.latitude);
+      Tween<double> lngTween = Tween(begin: mapController.center.longitude, end: center.longitude);
+      Tween<double> zoomTween = Tween(begin: mapController.zoom, end: 15.0);
+      Tween<double> rotationTween = Tween(begin: mapController.rotation, end: 0.0);
+      var controller = AnimationController(duration: const Duration(seconds: 2), vsync: this);
+      Animation<double> animation = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+      controller.addListener(() {
+        mapController.moveAndRotate(
+            LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+            zoomTween.evaluate(animation), rotationTween.evaluate(animation));
+      });
+      animation.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.dispose();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.dispose();
+        }
+      });
+      controller.forward();
     }
   }
 
