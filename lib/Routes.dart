@@ -6,6 +6,7 @@ import 'package:house_hunter/map.dart';
 import 'package:house_hunter/list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:house_hunter/profile/profile.dart';
+import 'package:house_hunter/search.dart';
 
 class Routes extends StatefulWidget {
   Routes({Key? key}) : super(key: key);
@@ -14,12 +15,10 @@ class Routes extends StatefulWidget {
 }
 
 class _Routes extends State<Routes> {
-  TextEditingController textController = TextEditingController();
-
   @override
   void dispose() {
     super.dispose();
-    textController.dispose();
+    Provider.of<Search>(context, listen: false).textController.dispose();
   }
 
   Widget mapPage() {
@@ -27,7 +26,8 @@ class _Routes extends State<Routes> {
       children: [
         Map(),
         SafeArea(
-          child: SearchBar(textController: textController),
+          child: SearchBar(
+              textController: Provider.of<Search>(context).textController),
         ),
       ],
     );
@@ -37,7 +37,8 @@ class _Routes extends State<Routes> {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          SearchBar(textController: textController),
+          SearchBar(
+              textController: Provider.of<Search>(context).textController),
           ResultsListView(),
         ],
       ),
@@ -45,9 +46,7 @@ class _Routes extends State<Routes> {
   }
 
   Widget resultPage() {
-    return SafeArea(
-        child: Listing()
-    );
+    return SafeArea(child: Listing());
   }
 
   Widget profilePage() {
@@ -61,12 +60,7 @@ class _Routes extends State<Routes> {
     return Consumer<Navigation>(builder: (context, navigation, child) {
       return IndexedStack(
         index: navigation.currentPage.index,
-        children: [
-          mapPage(),
-          listViewPage(),
-          resultPage(),
-          profilePage()
-        ],
+        children: [mapPage(), listViewPage(), resultPage(), profilePage()],
       );
     });
   }

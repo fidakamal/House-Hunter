@@ -26,7 +26,10 @@ class FloatingButton extends StatelessWidget {
 
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks[0].street);
+
+    if (placemarks[0].street != null)
+      Provider.of<Search>(context, listen: false).textController.text =
+          placemarks[0].street!;
 
     Provider.of<Search>(context, listen: false)
         .seachRentals(position.latitude, position.longitude);

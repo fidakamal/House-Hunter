@@ -16,6 +16,7 @@ class Search extends ChangeNotifier {
   bool loading = false;
   LatLng center = LatLng(23.7937, 90.4066);
   String lastSearch = "";
+  TextEditingController textController = TextEditingController();
 
   void toggleLoading() {
     loading = !loading;
