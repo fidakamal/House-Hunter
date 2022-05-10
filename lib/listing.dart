@@ -190,7 +190,7 @@ class _Listing extends State<Listing> {
                         style: const TextStyle(fontSize: 17)),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 CallButton(number: document!['phone']),
               ],
             ),
@@ -211,14 +211,15 @@ class CallButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 14.0),
         child: SizedBox(
-          height: 45,
+          height: 50,
+          width: 300,
           child: Material(
-            elevation: 5.0,
+            elevation: 10.0,
             color: Colors.cyanAccent.shade700,
             borderRadius: BorderRadius.circular(25.0),
             child: MaterialButton(
               onPressed: () => launchUrl(Uri(scheme: "tel", path: number)),
-              minWidth: 300.0,
+              minWidth: 200.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
