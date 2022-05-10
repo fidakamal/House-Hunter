@@ -115,7 +115,7 @@ class _PostListingState extends State<PostListing> {
                     onChanged: (value) => address = value,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Address cannot be empty";
+                        return "Address is required";
                       } else {
                         return null;
                       }
@@ -129,7 +129,7 @@ class _PostListingState extends State<PostListing> {
                     onChanged: (value) => rent = int.parse(value),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Rent cannot be empty";
+                        return "Rent is required";
                       } else {
                         return null;
                       }
@@ -145,6 +145,13 @@ class _PostListingState extends State<PostListing> {
                       );
                     }).toList(),
                     onChanged: (int? value) => beds = value!,
+                    validator: (value) {
+                      if (value == null) {
+                        return "Number of beds is required";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(height: 25.0),
                   fieldLabel("Baths"),
@@ -156,6 +163,13 @@ class _PostListingState extends State<PostListing> {
                       );
                     }).toList(),
                     onChanged: (int? value) => baths = value!,
+                    validator: (value) {
+                      if (value == null) {
+                        return "Number of baths is required";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(height: 25.0),
                   fieldLabel("Size (sq. ft.)"),
@@ -172,7 +186,7 @@ class _PostListingState extends State<PostListing> {
                     onChanged: (value) => contactNo = value,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Contact no. cannot be empty";
+                        return "Contact no. is required";
                       } else {
                         return null;
                       }
