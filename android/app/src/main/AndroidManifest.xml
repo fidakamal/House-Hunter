@@ -8,7 +8,7 @@
    <application
         tools:replace="android:label"
         android:label="House Hunter"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
