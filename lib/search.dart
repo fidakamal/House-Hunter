@@ -60,7 +60,6 @@ class Search extends ChangeNotifier {
   }
 
   void seachRentals(double latitude, double longitude) async {
-    toggleLoading();
     try {
       GeoFirePoint geopoint = GeoFirePoint(latitude, longitude);
       getNearbyRentals(geopoint);

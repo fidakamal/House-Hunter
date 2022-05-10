@@ -10,6 +10,7 @@ class FloatingButton extends StatelessWidget {
   final Location location = Location();
 
   void getLocation(BuildContext context) async {
+    Provider.of<Search>(context, listen: false).toggleLoading();
     bool locationEnabled = await Geolocator.isLocationServiceEnabled();
     if (!locationEnabled) {
       locationEnabled = await location.requestService();
