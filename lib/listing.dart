@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:house_hunter/Navigation.dart';
 import 'package:house_hunter/bottom_navigation.dart';
@@ -113,60 +114,84 @@ class _Listing extends State<Listing> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(document!['name'], style: const TextStyle(fontSize: 30)),
-                const SizedBox(height: 20),
                 Row(
                   children: [
-                    const Icon(Icons.phone_rounded, size: 25),
-                    const SizedBox(width: 10),
-                    Text(document!['phone'], style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 10),
-                    CallButton(number: document!['phone'])
+                    SvgPicture.asset("assets/icons/taka.svg",
+                        height: 26, width: 26),
+                    //const SizedBox(width: 10),
+                    Text(
+                      document!['rent'].toString(),
+                      style: const TextStyle(
+                          fontSize: 25, fontFamily: "SignikaNegative"),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.location_on, size: 25),
-                    const SizedBox(width: 10),
+                    const Icon(Icons.location_on_outlined, size: 25),
+                    const SizedBox(width: 5),
                     Flexible(
-                        child: Text(document!['address'],
-                            style: const TextStyle(fontSize: 20)))
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(document!['name'],
+                            style: const TextStyle(fontSize: 18)),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          document!['address'],
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.black87),
+                        ),
+                      ],
+                    ))
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 Row(
+                  //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset("assets/icons/taka.svg", height: 25, width: 25),
+                    const Icon(Icons.king_bed_outlined, size: 25),
                     const SizedBox(width: 10),
-                    Text(document!['rent'].toString(),
-                        style: const TextStyle(fontSize: 20)),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    const Icon(Icons.bed_rounded, size: 25),
-                    const SizedBox(width: 10),
-                    Text(document!['bedrooms'].toString() + " beds",
-                        style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 20),
+                    Text(
+                      document!['bedrooms'].toString() + " Beds",
+                      style:
+                          const TextStyle(fontSize: 17, color: Colors.black87),
+                    ),
+                    const SizedBox(width: 40),
                     const Icon(Icons.shower_outlined, size: 25),
                     const SizedBox(width: 10),
-                    Text(document!['baths'].toString() + " baths",
-                        style: const TextStyle(fontSize: 20)),
+                    Text(
+                      document!['baths'].toString() + " Baths",
+                      style:
+                          const TextStyle(fontSize: 17, color: Colors.black87),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    const Icon(Icons.architecture_rounded, size: 25),
+                    const Icon(Icons.straighten_rounded, size: 25),
                     const SizedBox(width: 10),
                     Flexible(
                         child: Text(document!['size'].toString() + " sq. ft.",
-                            style: const TextStyle(fontSize: 20)))
+                            style: const TextStyle(fontSize: 17)))
                   ],
                 ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const Icon(Icons.local_phone_outlined, size: 25),
+                    const SizedBox(width: 10),
+                    Text(document!['phone'],
+                        style: const TextStyle(fontSize: 17)),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                CallButton(number: document!['phone']),
               ],
             ),
           ),
@@ -182,20 +207,38 @@ class CallButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          primary: Colors.white,
-          backgroundColor: Colors.cyanAccent.shade700,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-      ),
-      onPressed: () => launchUrl(Uri(scheme: "tel", path: number)),
-      child: Row(
-        children: [
-          Icon(Icons.phone_rounded, size: 15),
-          const SizedBox(width: 5),
-          Text("Call"),
-        ],
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 14.0),
+        child: SizedBox(
+          height: 45,
+          child: Material(
+            elevation: 5.0,
+            color: Colors.cyanAccent.shade700,
+            borderRadius: BorderRadius.circular(25.0),
+            child: MaterialButton(
+              onPressed: () => launchUrl(Uri(scheme: "tel", path: number)),
+              minWidth: 300.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.phone_in_talk_rounded,
+                    size: 17,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Call Now",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
