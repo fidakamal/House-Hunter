@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:house_hunter/Navigation.dart';
 import 'package:house_hunter/bottom_navigation.dart';
@@ -62,9 +61,7 @@ class _Listing extends State<Listing> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Icon(Icons.home_work_rounded, size: 80),
-              SizedBox(
-                height: 10.0,
-              ),
+              SizedBox(height: 10.0),
               Text("See anything you like?",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15, color: Colors.black54)),
@@ -72,18 +69,17 @@ class _Listing extends State<Listing> {
               Text(
                   "When you tap on a listing, a detailed overview will show up here. Try it!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14, height: 1.5, color: Colors.black38)),
+                  style: TextStyle(fontSize: 14, height: 1.5, color: Colors.black38)),
               SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 70),
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         primary: Colors.cyanAccent[700],
-                        padding:
-                            EdgeInsets.symmetric(vertical: 17, horizontal: 10),
+                        padding: EdgeInsets.symmetric(vertical: 17, horizontal: 10),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12))),
+                            borderRadius: BorderRadius.circular(12))
+                    ),
                     onPressed: () => navigation.updateCurrentPage(PageName.map),
                     child: Text("Start Browsing")),
               )
@@ -97,9 +93,7 @@ class _Listing extends State<Listing> {
           child: SizedBox(
             height: 100,
             width: 100,
-            child: CircularProgressIndicator(
-              strokeWidth: 10,
-            ),
+            child: CircularProgressIndicator(strokeWidth: 10),
           ),
         );
       }
@@ -116,13 +110,16 @@ class _Listing extends State<Listing> {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset("assets/icons/taka.svg",
-                        height: 26, width: 26),
+                    SvgPicture.asset(
+                        "assets/icons/taka.svg",
+                        height: 26, width: 26
+                    ),
                     //const SizedBox(width: 10),
                     Text(
                       document!['rent'].toString(),
                       style: const TextStyle(
-                          fontSize: 25, fontFamily: "SignikaNegative"),
+                          fontSize: 25, fontFamily: "SignikaNegative"
+                      ),
                     ),
                   ],
                 ),
@@ -134,60 +131,71 @@ class _Listing extends State<Listing> {
                     const SizedBox(width: 5),
                     Flexible(
                         child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(document!['name'],
-                            style: const TextStyle(fontSize: 18)),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          document!['address'],
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.black87),
-                        ),
-                      ],
-                    ))
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (document!["name"] != "")
+                              Column(
+                                children: [
+                                  Text(
+                                      document!['name'],
+                                      style: const TextStyle(fontSize: 18)
+                                  ),
+                                  SizedBox(height: 5),
+                                ],
+                              ),
+                            Text(
+                              document!['address'],
+                              style: TextStyle(
+                                  fontSize: document!["name"] == "" ? 18 : 15,
+                                  color: Colors.black87
+                              )
+                            ),
+                          ],
+                        )
+                    )
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 Row(
-                  //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Icons.king_bed_outlined, size: 25),
                     const SizedBox(width: 10),
                     Text(
                       document!['bedrooms'].toString() + " Beds",
-                      style:
-                          const TextStyle(fontSize: 17, color: Colors.black87),
+                      style: TextStyle(fontSize: 17, color: Colors.black87),
                     ),
                     const SizedBox(width: 40),
                     const Icon(Icons.shower_outlined, size: 25),
                     const SizedBox(width: 10),
                     Text(
                       document!['baths'].toString() + " Baths",
-                      style:
-                          const TextStyle(fontSize: 17, color: Colors.black87),
+                      style: TextStyle(fontSize: 17, color: Colors.black87),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Row(
+                if (document!["size"] != 0) Column(
                   children: [
-                    const Icon(Icons.straighten_rounded, size: 25),
-                    const SizedBox(width: 10),
-                    Flexible(
-                        child: Text(document!['size'].toString() + " sq. ft.",
-                            style: const TextStyle(fontSize: 17)))
+                    Row(
+                      children: [
+                        const Icon(Icons.straighten_rounded, size: 25),
+                        const SizedBox(width: 10),
+                        Flexible(
+                            child: Text(
+                                document!['size'].toString() + " sq. ft.",
+                                style: const TextStyle(fontSize: 17)
+                            )
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
-                const SizedBox(height: 20),
                 Row(
                   children: [
                     const Icon(Icons.local_phone_outlined, size: 25),
                     const SizedBox(width: 10),
-                    Text(document!['phone'],
-                        style: const TextStyle(fontSize: 17)),
+                    Text(document!['phone'], style: TextStyle(fontSize: 17)),
                   ],
                 ),
                 const SizedBox(height: 30),
@@ -223,18 +231,9 @@ class CallButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.phone_in_talk_rounded,
-                    size: 17,
-                    color: Colors.white,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "Call Now",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  Icon(Icons.phone_in_talk_rounded, size: 17, color: Colors.white),
+                  SizedBox(width: 5),
+                  Text("Call Now", style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),

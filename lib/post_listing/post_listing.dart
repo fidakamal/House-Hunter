@@ -18,7 +18,7 @@ class PostListing extends StatefulWidget {
 class _PostListingState extends State<PostListing> {
   List<int> dropdownOptions = [1, 2, 3, 4, 5];
   late String buildingName = "", address, contactNo;
-  late int rent, beds = 0, baths = 0, squareFeet = 0;
+  late int rent, beds, baths, squareFeet = 0;
   final _firestore = FirebaseFirestore.instance;
   final geo = Geoflutterfire();
   final _auth = FirebaseAuth.instance;

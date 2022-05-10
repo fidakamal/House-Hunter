@@ -88,7 +88,7 @@ class _UserListingCard extends State<UserListingCard> {
                       ],
                     ),
                   ),
-                  Row(
+                  if(widget.doc["name"] != "") Row(
                     children: [
                       Icon(Icons.apartment_rounded, size: 15),
                       SizedBox(width: 2),
