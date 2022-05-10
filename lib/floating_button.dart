@@ -3,6 +3,7 @@ import 'package:house_hunter/search.dart';
 import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:geocoding/geocoding.dart' hide Location;
 
 class FloatingButton extends StatelessWidget {
   FloatingButton({Key? key}) : super(key: key);
@@ -22,6 +23,11 @@ class FloatingButton extends StatelessWidget {
     }
 
     Position position = await Geolocator.getCurrentPosition();
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks[0].street);
+
     Provider.of<Search>(context, listen: false)
         .seachRentals(position.latitude, position.longitude);
   }
