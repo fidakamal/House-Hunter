@@ -64,7 +64,7 @@ class _ResultsListViewState extends State<ResultsListView> {
       } else {
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: SingleChildScrollView(
               child: ListView(
                   shrinkWrap: true,

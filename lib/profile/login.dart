@@ -24,27 +24,19 @@ class _LoginState extends State<Login> {
             children: <Widget>[
               TextField(
                 textAlign: TextAlign.center,
-                onChanged: (value) {
-                  email = value;
-                },
+                onChanged: (value) => email = value,
                 decoration:
                     kInputDecoration.copyWith(hintText: "Enter your email"),
               ),
-              SizedBox(
-                height: 15.0,
-              ),
+              SizedBox(height: 15.0),
               TextField(
                 obscureText: true,
                 textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value;
-                },
+                onChanged: (value) => password = value,
                 decoration:
                     kInputDecoration.copyWith(hintText: "Enter your password"),
               ),
-              SizedBox(
-                height: 24.0,
-              ),
+              SizedBox(height: 24.0),
               RoundedButton(
                 title: "Login",
                 color: Colors.cyan.shade300,

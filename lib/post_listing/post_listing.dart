@@ -88,23 +88,15 @@ class _PostListingState extends State<PostListing> {
               children: [
                 Row(
                   children: [
-                    Icon(
-                      Icons.launch,
-                      size: 28.0,
-                    ),
-                    SizedBox(
-                      width: 8.0,
-                    ),
+                    Icon(Icons.launch_rounded, size: 28.0),
+                    SizedBox(width: 8.0),
                     Text(
                       "Post a Listing",
-                      style: TextStyle(
-                          fontSize: 30.0, fontFamily: "SignikaNegative"),
+                      style: TextStyle(fontSize: 30.0, fontFamily: "SignikaNegative"),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 30.0,
-                ),
+                SizedBox(height: 30.0),
                 fieldLabel("Name of Apartment Building"),
                 TextField(
                   style: TextStyle(fontSize: 16.0),
@@ -169,8 +161,7 @@ class _PostListingState extends State<PostListing> {
                         child: ElevatedButton(
                           onPressed: () => addImages(),
                           child: Text("Add Images",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 15.0)),
+                              style: TextStyle(color: Colors.white, fontSize: 15.0)),
                           style: kImageButtonStyle,
                         ),
                       ),
@@ -182,9 +173,7 @@ class _PostListingState extends State<PostListing> {
                     removeImage: (index) => removeImage(index),
                     insertImage: () => addImages(),
                   ),
-                SizedBox(
-                  height: 10.0,
-                ),
+                SizedBox(height: 10.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

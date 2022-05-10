@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'House Hunter'),
+      scrollBehavior: GlowlessScroll(),
     );
   }
 }
@@ -52,5 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ? FloatingButton()
               : null,
     );
+  }
+}
+
+class GlowlessScroll extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }
