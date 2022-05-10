@@ -88,9 +88,9 @@ class _Map extends State<Map> with TickerProviderStateMixin {
       height: 80.0,
       point: Provider.of<Search>(context).center,
       builder: (context) => Icon(
-        Icons.gps_fixed_rounded,
-        color: Colors.cyanAccent[700],
-        size: 30,
+        Icons.radio_button_checked_rounded,
+        color: Colors.lightBlue[400],
+        size: 25,
       ),
     );
   }
