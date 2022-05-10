@@ -152,7 +152,7 @@ class _Map extends State<Map> with TickerProviderStateMixin {
           Provider.of<Navigation>(context).currentPage == PageName.map) {
         showError(context);
       }
-      moveMap(search.center);
+      if (search.results.isNotEmpty)  moveMap(search.center);
       mapController.onReady.then((value) {
         if (!mapReady) mapReady = true;
       });
