@@ -120,7 +120,7 @@ class _SearchFilters extends State<SearchFilters> {
                   child: ElevatedButton(
                       style: buttonStyle(),
                       onPressed: () => updateFilters(context),
-                      child: Text("Search", style: TextStyle(fontSize: 16))),
+                      child: Text("Apply", style: TextStyle(fontSize: 16))),
                 ),
                 SizedBox(width: 35),
                 SizedBox(
@@ -142,7 +142,9 @@ class _SearchFilters extends State<SearchFilters> {
     search.updateFilters(roomController.selectedIndexes.toList(),
         bathController.selectedIndex ?? 0, selectedPriceRange);
     Navigator.pop(context);
-    search.searchRentals(search.lastSearch);
+    if (search.results.isEmpty) return;
+    search.toggleLoading();
+    search.seachRentals(search.center.latitude, search.center.longitude);
   }
 
   void resetFilters() {
