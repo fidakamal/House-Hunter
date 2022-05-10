@@ -61,7 +61,6 @@ class _UserListingCard extends State<UserListingCard> {
                   child: Image.asset("assets/images/default.png")
               )
             else  Container(
-                  constraints: BoxConstraints(maxHeight: 300),
                   child: Center(
                       child: ClipRRect(
                           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
