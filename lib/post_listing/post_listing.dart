@@ -17,8 +17,8 @@ class PostListing extends StatefulWidget {
 
 class _PostListingState extends State<PostListing> {
   List<int> dropdownOptions = [1, 2, 3, 4, 5];
-  late String buildingName, address, contactNo;
-  late int rent, beds, baths, squareFeet;
+  late String buildingName = "", address, contactNo;
+  late int rent, beds = 0, baths = 0, squareFeet = 0;
   final _firestore = FirebaseFirestore.instance;
   final geo = Geoflutterfire();
   final _auth = FirebaseAuth.instance;
@@ -26,6 +26,7 @@ class _PostListingState extends State<PostListing> {
   List<File> images = [];
   ImagePicker picker = ImagePicker();
   final storage = FirebaseStorage.instance.ref();
+  final _formKey = GlobalKey<FormState>();
 
   Future<GeoFirePoint> getGeopoint(address) async {
     List<Location> coordinates = await locationFromAddress(address);
@@ -59,7 +60,9 @@ class _PostListingState extends State<PostListing> {
       "location": geopoint.data,
     });
     for (var image in images) {
-      storage.child("/rentalImages/${doc.id}/${image.path.split("/").last}").putFile(image);
+      storage
+          .child("/rentalImages/${doc.id}/${image.path.split("/").last}")
+          .putFile(image);
     }
   }
 
@@ -83,127 +86,158 @@ class _PostListingState extends State<PostListing> {
           padding: const EdgeInsets.only(
               left: 30.0, right: 30.0, top: 20.0, bottom: 10.0),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.launch_rounded, size: 28.0),
-                    SizedBox(width: 8.0),
-                    Text(
-                      "Post a Listing",
-                      style: TextStyle(fontSize: 30.0, fontFamily: "SignikaNegative"),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30.0),
-                fieldLabel("Name of Apartment Building"),
-                TextField(
-                  style: TextStyle(fontSize: 16.0),
-                  onChanged: (value) => buildingName = value,
-                ),
-                SizedBox(height: 25.0),
-                fieldLabel("Address"),
-                TextField(
-                  style: TextStyle(fontSize: 16.0),
-                  onChanged: (value) => address = value,
-                ),
-                SizedBox(height: 25.0),
-                fieldLabel("Rent"),
-                TextField(
-                  style: TextStyle(fontSize: 16.0),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => rent = int.parse(value),
-                ),
-                SizedBox(height: 25.0),
-                fieldLabel("Beds"),
-                DropdownButtonFormField(
-                  items: dropdownOptions.map((int val) {
-                    return DropdownMenuItem(
-                      value: val,
-                      child: Text(val.toString()),
-                    );
-                  }).toList(),
-                  onChanged: (int? value) => beds = value!,
-                ),
-                SizedBox(height: 25.0),
-                fieldLabel("Baths"),
-                DropdownButtonFormField(
-                  items: dropdownOptions.map((int val) {
-                    return DropdownMenuItem(
-                      value: val,
-                      child: Text(val.toString()),
-                    );
-                  }).toList(),
-                  onChanged: (int? value) => baths = value!,
-                ),
-                SizedBox(height: 25.0),
-                fieldLabel("Size (sq. ft.)"),
-                TextField(
-                  style: TextStyle(fontSize: 16.0),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => squareFeet = int.parse(value),
-                ),
-                SizedBox(height: 25.0),
-                fieldLabel("Contact No."),
-                TextField(
-                  style: TextStyle(fontSize: 16.0),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => contactNo = value,
-                ),
-                SizedBox(height: 30.0),
-                if (images.isEmpty)
-                  Container(
-                    margin: EdgeInsets.only(bottom: 40),
-                    child: Center(
-                      child: SizedBox(
-                        width: 250.0,
-                        child: ElevatedButton(
-                          onPressed: () => addImages(),
-                          child: Text("Add Images",
-                              style: TextStyle(color: Colors.white, fontSize: 15.0)),
-                          style: kImageButtonStyle,
-                        ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.launch_rounded, size: 28.0),
+                      SizedBox(width: 8.0),
+                      Text(
+                        "Post a Listing",
+                        style: TextStyle(
+                            fontSize: 30.0, fontFamily: "SignikaNegative"),
                       ),
-                    ),
-                  )
-                else
-                  ImageCarousel(
-                    images: images,
-                    removeImage: (index) => removeImage(index),
-                    insertImage: () => addImages(),
+                    ],
                   ),
-                SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 120.0,
-                      child: ElevatedButton(
-                        onPressed: () => post(),
-                        child: Text(
-                          "Post",
-                          style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  SizedBox(height: 30.0),
+                  fieldLabel("Name of Apartment Building"),
+                  TextField(
+                    style: TextStyle(fontSize: 16.0),
+                    onChanged: (value) => buildingName = value,
+                  ),
+                  SizedBox(height: 25.0),
+                  fieldLabel("Address"),
+                  TextFormField(
+                    style: TextStyle(fontSize: 16.0),
+                    onChanged: (value) => address = value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Address cannot be empty";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(height: 25.0),
+                  fieldLabel("Rent"),
+                  TextFormField(
+                    style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => rent = int.parse(value),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Rent cannot be empty";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(height: 25.0),
+                  fieldLabel("Beds"),
+                  DropdownButtonFormField(
+                    items: dropdownOptions.map((int val) {
+                      return DropdownMenuItem(
+                        value: val,
+                        child: Text(val.toString()),
+                      );
+                    }).toList(),
+                    onChanged: (int? value) => beds = value!,
+                  ),
+                  SizedBox(height: 25.0),
+                  fieldLabel("Baths"),
+                  DropdownButtonFormField(
+                    items: dropdownOptions.map((int val) {
+                      return DropdownMenuItem(
+                        value: val,
+                        child: Text(val.toString()),
+                      );
+                    }).toList(),
+                    onChanged: (int? value) => baths = value!,
+                  ),
+                  SizedBox(height: 25.0),
+                  fieldLabel("Size (sq. ft.)"),
+                  TextField(
+                    style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => squareFeet = int.parse(value),
+                  ),
+                  SizedBox(height: 25.0),
+                  fieldLabel("Contact No."),
+                  TextFormField(
+                    style: TextStyle(fontSize: 16.0),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => contactNo = value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Contact no. cannot be empty";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(height: 30.0),
+                  if (images.isEmpty)
+                    Container(
+                      margin: EdgeInsets.only(bottom: 40),
+                      child: Center(
+                        child: SizedBox(
+                          width: 200.0,
+                          child: ElevatedButton(
+                            onPressed: () => addImages(),
+                            child: Text("Add Images",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15.0)),
+                            style: kImageButtonStyle,
+                          ),
                         ),
-                        style: kButtonStyle,
                       ),
+                    )
+                  else
+                    ImageCarousel(
+                      images: images,
+                      removeImage: (index) => removeImage(index),
+                      insertImage: () => addImages(),
                     ),
-                    SizedBox(width: 35.0),
-                    SizedBox(
-                      width: 120.0,
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 120.0,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              post();
+                            }
+                          },
+                          child: Text(
+                            "Post",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 15.0),
+                          ),
+                          style: kButtonStyle,
                         ),
-                        style: kCancelButtonStyle,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 40)
-              ],
+                      SizedBox(width: 35.0),
+                      SizedBox(
+                        width: 120.0,
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            "Cancel",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 15.0),
+                          ),
+                          style: kCancelButtonStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 40)
+                ],
+              ),
             ),
           ),
         ),
@@ -218,27 +252,27 @@ Text fieldLabel(String text) {
 }
 
 var kButtonStyle = ButtonStyle(
-  backgroundColor: MaterialStateProperty.all(Colors.indigo[400]),
+  backgroundColor: MaterialStateProperty.all(Colors.cyanAccent[700]),
   padding: MaterialStateProperty.all<EdgeInsets>(
-    EdgeInsets.only(top: 14.0, bottom: 14.0),
+    EdgeInsets.only(top: 16.0, bottom: 16.0),
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
   ),
 );
 
 var kCancelButtonStyle = ButtonStyle(
-  backgroundColor: MaterialStateProperty.all(Colors.indigo[300]),
+  backgroundColor: MaterialStateProperty.all(Colors.cyanAccent[700]),
   padding: MaterialStateProperty.all<EdgeInsets>(
-    EdgeInsets.only(top: 14.0, bottom: 14.0),
+    EdgeInsets.only(top: 16.0, bottom: 16.0),
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
   ),
 );
 
 var kImageButtonStyle = ButtonStyle(
-  backgroundColor: MaterialStateProperty.all(Colors.cyanAccent[700]),
+  backgroundColor: MaterialStateProperty.all(Colors.cyan[300]),
   padding: MaterialStateProperty.all<EdgeInsets>(
     EdgeInsets.only(top: 8.0, bottom: 8.0),
   ),

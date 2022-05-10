@@ -157,7 +157,6 @@ class _SearchFilters extends State<SearchFilters> {
   ButtonStyle buttonStyle() {
     return ElevatedButton.styleFrom(
       primary: Colors.cyanAccent[700],
-      //fixedSize: Size(120, 40),
       padding: EdgeInsets.only(top: 16, bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
     );
