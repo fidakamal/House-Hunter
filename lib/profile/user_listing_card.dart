@@ -46,18 +46,26 @@ class _UserListingCard extends State<UserListingCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: InkWell(
         onTap: () => widget.onTap(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (loadingImage) LoadingIndicator()
-            else if (image == "")  Image.asset("assets/images/default.png")
+            if (loadingImage) 
+              LoadingIndicator()
+            else if (image == "")  
+              ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  child: Image.asset("assets/images/default.png")
+              )
             else  Container(
-                  constraints: BoxConstraints(maxHeight: 300),
                   child: Center(
-                      child:Image.network(image)
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                          child: Image.network(image, fit: BoxFit.fitHeight)
+                      )
                   )
               ),
             Padding(
@@ -94,9 +102,11 @@ class _UserListingCard extends State<UserListingCard> {
                     children: [
                       Icon(Icons.location_on, size: 15),
                       SizedBox(width: 2),
-                      Text(
-                        widget.doc["address"],
-                        style: TextStyle(fontSize: 15),
+                      Flexible(
+                          child: Text(
+                            widget.doc["address"],
+                            style: TextStyle(fontSize: 15),
+                          )
                       ),
                     ],
                   ),

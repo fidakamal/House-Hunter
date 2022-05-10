@@ -39,7 +39,7 @@ class _SearchBar extends State<SearchBar> {
     if (widget.textController.text != "") {
       return IconButton(
         icon: const Icon(
-          Icons.clear,
+          Icons.clear_rounded,
           size: 20.0,
         ),
         onPressed: () => clearSearch(),
