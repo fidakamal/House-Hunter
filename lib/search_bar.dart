@@ -49,6 +49,7 @@ class _SearchBar extends State<SearchBar> {
   }
 
   void search() {
+    Provider.of<Search>(context, listen: false).currentLocationSearched = false;
     Provider.of<Search>(context, listen: false)
         .searchRentals(widget.textController.text);
   }
