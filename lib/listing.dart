@@ -202,8 +202,11 @@ class _Listing extends State<Listing> {
                     title: "Send Message",
                     icon: Icons.message_outlined,
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Message()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Message(document!["user"])));
                     },
                     color: Colors.cyanAccent.shade700)
               ],
