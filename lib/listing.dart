@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'ImageCarousel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:house_hunter/message.dart';
 
 class Listing extends StatefulWidget {
   const Listing({Key? key}) : super(key: key);
@@ -69,17 +70,18 @@ class _Listing extends State<Listing> {
               Text(
                   "When you tap on a listing, a detailed overview will show up here. Try it!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, height: 1.5, color: Colors.black38)),
+                  style: TextStyle(
+                      fontSize: 14, height: 1.5, color: Colors.black38)),
               SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 70),
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         primary: Colors.cyanAccent[700],
-                        padding: EdgeInsets.symmetric(vertical: 17, horizontal: 10),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 17, horizontal: 10),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12))
-                    ),
+                            borderRadius: BorderRadius.circular(12))),
                     onPressed: () => navigation.updateCurrentPage(PageName.map),
                     child: Text("Start Browsing")),
               )
@@ -110,16 +112,13 @@ class _Listing extends State<Listing> {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                        "assets/icons/taka.svg",
-                        height: 26, width: 26
-                    ),
+                    SvgPicture.asset("assets/icons/taka.svg",
+                        height: 26, width: 26),
                     //const SizedBox(width: 10),
                     Text(
                       document!['rent'].toString(),
                       style: const TextStyle(
-                          fontSize: 25, fontFamily: "SignikaNegative"
-                      ),
+                          fontSize: 25, fontFamily: "SignikaNegative"),
                     ),
                   ],
                 ),
@@ -131,28 +130,22 @@ class _Listing extends State<Listing> {
                     const SizedBox(width: 5),
                     Flexible(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (document!["name"] != "")
-                              Column(
-                                children: [
-                                  Text(
-                                      document!['name'],
-                                      style: const TextStyle(fontSize: 18)
-                                  ),
-                                  SizedBox(height: 5),
-                                ],
-                              ),
-                            Text(
-                              document!['address'],
-                              style: TextStyle(
-                                  fontSize: document!["name"] == "" ? 18 : 15,
-                                  color: Colors.black87
-                              )
-                            ),
-                          ],
-                        )
-                    )
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (document!["name"] != "")
+                          Column(
+                            children: [
+                              Text(document!['name'],
+                                  style: const TextStyle(fontSize: 18)),
+                              SizedBox(height: 5),
+                            ],
+                          ),
+                        Text(document!['address'],
+                            style: TextStyle(
+                                fontSize: document!["name"] == "" ? 18 : 15,
+                                color: Colors.black87)),
+                      ],
+                    ))
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -174,23 +167,22 @@ class _Listing extends State<Listing> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                if (document!["size"] != 0) Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.straighten_rounded, size: 25),
-                        const SizedBox(width: 10),
-                        Flexible(
-                            child: Text(
-                                document!['size'].toString() + " sq. ft.",
-                                style: const TextStyle(fontSize: 17)
-                            )
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                if (document!["size"] != 0)
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.straighten_rounded, size: 25),
+                          const SizedBox(width: 10),
+                          Flexible(
+                              child: Text(
+                                  document!['size'].toString() + " sq. ft.",
+                                  style: const TextStyle(fontSize: 17)))
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 Row(
                   children: [
                     const Icon(Icons.local_phone_outlined, size: 25),
@@ -199,7 +191,21 @@ class _Listing extends State<Listing> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                CallButton(number: document!['phone']),
+                ContactButton(
+                  title: "Call Now",
+                  icon: Icons.phone_in_talk_rounded,
+                  onPressed: () =>
+                      launchUrl(Uri(scheme: "tel", path: document!['phone'])),
+                  color: Colors.cyan.shade400,
+                ),
+                ContactButton(
+                    title: "Send Message",
+                    icon: Icons.message_outlined,
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Message()));
+                    },
+                    color: Colors.cyanAccent.shade700)
               ],
             ),
           ),
@@ -209,9 +215,17 @@ class _Listing extends State<Listing> {
   }
 }
 
-class CallButton extends StatelessWidget {
-  const CallButton({Key? key, required this.number}) : super(key: key);
-  final String number;
+class ContactButton extends StatelessWidget {
+  const ContactButton(
+      {required this.title,
+      required this.icon,
+      required this.onPressed,
+      required this.color});
+
+  final String title;
+  final IconData icon;
+  final void Function() onPressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -222,18 +236,18 @@ class CallButton extends StatelessWidget {
           height: 50,
           width: 300,
           child: Material(
-            elevation: 10.0,
-            color: Colors.cyanAccent.shade700,
+            elevation: 5.0,
+            color: color,
             borderRadius: BorderRadius.circular(25.0),
             child: MaterialButton(
-              onPressed: () => launchUrl(Uri(scheme: "tel", path: number)),
+              onPressed: onPressed,
               minWidth: 200.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.phone_in_talk_rounded, size: 17, color: Colors.white),
+                  Icon(icon, size: 17, color: Colors.white),
                   SizedBox(width: 5),
-                  Text("Call Now", style: TextStyle(color: Colors.white)),
+                  Text(title, style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
