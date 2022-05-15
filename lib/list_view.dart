@@ -37,17 +37,18 @@ class _ResultsListViewState extends State<ResultsListView> {
       if (search.lastSearch == "" && docs.isEmpty) {
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 180.0),
+            padding:
+                const EdgeInsets.only(left: 100.0, right: 100.0, top: 180.0),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.manage_search_rounded, size: 70),
                   SizedBox(height: 10.0),
-                  Text(
-                    "Search an area to browse rentals in that area.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, height: 1.5, color: Colors.black54)),
+                  Text("Search an area to browse rentals in that area.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16, height: 1.5, color: Colors.black54)),
                 ],
               ),
             ),
@@ -64,18 +65,22 @@ class _ResultsListViewState extends State<ResultsListView> {
       } else {
         return Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: SingleChildScrollView(
               child: ListView(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  children: docs.map((doc) => UserListingCard(
-                    doc: doc,
-                    onTap: () {
-                      Provider.of<Navigation>(context, listen: false).updateSelectedDocument(doc);
-                      Provider.of<Navigation>(context, listen: false).updateCurrentPage(PageName.result);
-                      },
-                  )).toList()),
+                  children: docs
+                      .map((doc) => UserListingCard(
+                            doc: doc,
+                            onTap: () {
+                              Provider.of<Navigation>(context, listen: false)
+                                  .updateSelectedDocument(doc);
+                              Provider.of<Navigation>(context, listen: false)
+                                  .updateCurrentPage(PageName.result);
+                            },
+                          ))
+                      .toList()),
             ),
           ),
         );
