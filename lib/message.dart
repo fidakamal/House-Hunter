@@ -1,105 +1,155 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final _firestore = FirebaseFirestore.instance;
-late User loggedInUser;
-late String receiver;
-
 class Message extends StatefulWidget {
-  Message(String landlord) {
-    receiver = landlord;
-  }
+  const Message({Key? key, required this.receiver}) : super(key: key);
+  final String receiver;
 
   @override
   State<Message> createState() => _MessageState();
 }
 
 class _MessageState extends State<Message> {
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   late String messageText;
+  TextEditingController messageController = TextEditingController();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
+  void sendMessage() {
+    _firestore.collection("messages").add({
+      "people": [_auth.currentUser!.email!, widget.receiver],
+      "message": messageText,
+      "sender": _auth.currentUser!.email!,
+      "time": Timestamp.fromDate(DateTime.now()),
+    });
+    messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          MessageStream(),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  onChanged: (value) {
-                    messageText = value;
-                  },
-                ),
-              ),
-              TextButton(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextButton(
                 onPressed: () {
-                  _firestore.collection("messages").add({
-                    "message": messageText,
-                    "sender": loggedInUser.email,
-                    "receiver": receiver,
-                  });
+                  Navigator.pop(context);
                 },
-                child: Text(
-                  'Send',
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back, color: Colors.cyan[300]),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Back",
+                      style: TextStyle(fontSize: 18, color: Colors.cyan[300]),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            MessageStream(
+                user: _auth.currentUser!.email!, receiver: widget.receiver),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      top: 15,
+                      bottom: 15,
+                    ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(60),
+                          ),
+                          borderSide: BorderSide(
+                            color: Colors.cyan[300]!,
+                            width: 5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(60),
+                          ),
+                          borderSide: BorderSide(
+                            color: Colors.cyan[300]!,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                      controller: messageController,
+                      onChanged: (value) => messageText = value,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => sendMessage(),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.send_rounded,
+                        size: 30,
+                        color: Colors.cyan[300],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class MessageStream extends StatelessWidget {
+  const MessageStream({Key? key, required this.user, required this.receiver})
+      : super(key: key);
+  final String user;
+  final String receiver;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection("messages").snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection("messages")
+          .where("people", arrayContains: user)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.lightBlueAccent,
             ),
           );
         }
-        final messages = snapshot.data?.docs.reversed;
+
+        var messages = snapshot.data?.docs;
+        messages = messages!
+            .where((message) => message["people"].contains(receiver))
+            .toList();
+        messages.sort((a, b) => b["time"].compareTo(a["time"]));
+
         List<MessageBubble> messageBubbles = [];
         for (var message in messages!) {
           final messageText = message["message"];
           final sender = message["sender"];
-          final receiver = message["receiver"];
-
-          final currentUser = loggedInUser.email;
 
           final messageBubble = MessageBubble(
             sender: sender,
             text: messageText,
-            isMe: sender == currentUser ? true : false,
+            isMe: sender == user,
           );
           messageBubbles.add(messageBubble);
         }
@@ -130,7 +180,7 @@ class MessageBubble extends StatelessWidget {
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            sender,
+            sender.split("@")[0],
             style: TextStyle(
               color: Colors.black54,
               fontSize: 12.0,
@@ -144,14 +194,14 @@ class MessageBubble extends StatelessWidget {
               bottomRight: Radius.circular(30.0),
             ),
             elevation: 5.0,
-            color: isMe ? Colors.lightBlueAccent : Colors.white,
+            color: isMe ? Colors.cyan[300] : Colors.white,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 10.0,
                 horizontal: 20.0,
               ),
               child: Text(
-                "$text",
+                text,
                 style: TextStyle(
                   color: isMe ? Colors.white : Colors.black54,
                   fontSize: 15.0,
