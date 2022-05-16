@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:house_hunter/Navigation.dart';
 import 'package:house_hunter/bottom_navigation.dart';
@@ -44,6 +45,35 @@ class _Listing extends State<Listing> {
       this.images = imageUrls;
       loadingImages = false;
     });
+  }
+
+  void goToDMs(String receiver) {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) Provider.of<Navigation>(context, listen:false).updateCurrentPage(PageName.messages);
+    else if (user.email == receiver) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red.shade300,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          width: 250,
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          content: Text(
+            "You own this property!",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15),
+          )));
+    }
+    else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Message(receiver: document!["user"])
+          )
+      );
+    }
   }
 
   @override
@@ -201,15 +231,7 @@ class _Listing extends State<Listing> {
                 ContactButton(
                     title: "Send Message",
                     icon: Icons.message_outlined,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Message(receiver: document!["user"])
-                          )
-                      );
-                    },
+                    onPressed: () => goToDMs(document!["user"]),
                     color: Colors.cyanAccent.shade700)
               ],
             ),
