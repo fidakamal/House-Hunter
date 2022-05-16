@@ -3,7 +3,7 @@ import 'package:house_hunter/Navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-enum PageName { map, list, result, profile, messages }
+enum PageName { map, list, result, messages, profile }
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({Key? key}) : super(key: key);
