@@ -26,12 +26,8 @@ class _MessageListState extends State<MessageList> {
   }
 
   void goToDM(String receiver) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Message(receiver: receiver)
-        )
-    );
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => Message(receiver: receiver)));
   }
 
   @override
@@ -72,8 +68,10 @@ class _MessageListState extends State<MessageList> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("messages")
-            .where("people", arrayContains: user!.email).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection("messages")
+            .where("people", arrayContains: user!.email)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -117,8 +115,10 @@ class _MessageListState extends State<MessageList> {
 
           var docs = snapshot.data!.docs;
           docs.sort((a, b) => b["time"].compareTo(a["time"]));
-          Set receivers = docs.map((doc) => doc["people"]
-              .singleWhere((person) => person != user!.email)).toSet();
+          Set receivers = docs
+              .map((doc) =>
+                  doc["people"].singleWhere((person) => person != user!.email))
+              .toSet();
 
           return Container(
             padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
@@ -127,19 +127,17 @@ class _MessageListState extends State<MessageList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.message_rounded, size: 35.0),
-                      SizedBox(width: 7.0),
-                      Text(
-                        "Messages",
-                        style: TextStyle(
-                            fontSize: 30.0,
-                            fontFamily: "SignikaNegative"
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: const [
+                  //     Icon(Icons.mail_outlined, size: 35.0),
+                  //     SizedBox(width: 7.0),
+                  //     Text(
+                  //       "Messages",
+                  //       style: TextStyle(
+                  //           fontSize: 30.0, fontFamily: "SignikaNegative"),
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(height: 10.0),
                   ListView.builder(
                     shrinkWrap: true,
@@ -147,20 +145,24 @@ class _MessageListState extends State<MessageList> {
                     itemCount: receivers.length,
                     itemBuilder: ((context, index) {
                       return Material(
-                        color: Colors.transparent,
+                        elevation: 1,
+                        color: Colors.cyan[50],
+                        borderRadius: BorderRadius.circular(40),
                         child: InkWell(
                           customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(40),
                           ),
                           onTap: () => goToDM(receivers.elementAt(index)),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black12, width: 2),
-                              borderRadius: BorderRadius.circular(10),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 20),
+                            child: Text(
+                              receivers.elementAt(index).split("@")[0],
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: "SignikaNegative",
+                              ),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            child: Text(receivers.elementAt(index)),
                           ),
                         ),
                       );
@@ -170,7 +172,6 @@ class _MessageListState extends State<MessageList> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

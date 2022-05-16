@@ -44,18 +44,18 @@ class BottomNavigation extends StatelessWidget {
             ),
             SalomonBottomBarItem(
               icon: const Icon(
-                Icons.account_circle_rounded,
+                Icons.markunread,
                 size: 25.0,
               ),
-              title: const Text("Profile"),
+              title: const Text("Messages"),
               selectedColor: Colors.cyan[400],
             ),
             SalomonBottomBarItem(
               icon: const Icon(
-                Icons.message_rounded,
+                Icons.account_circle_rounded,
                 size: 25.0,
               ),
-              title: const Text("Texts"),
+              title: const Text("Profile"),
               selectedColor: Colors.cyan[400],
             ),
           ],
