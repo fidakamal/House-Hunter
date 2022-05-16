@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:house_hunter/message.dart';
 import 'package:house_hunter/profile/pre_logged_in_profile.dart';
 
 class MessageList extends StatefulWidget {
@@ -14,7 +15,12 @@ class _MessageListState extends State<MessageList> {
   User? user = FirebaseAuth.instance.currentUser;
 
   void goToDM(String receiver) {
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Message(receiver: receiver)
+        )
+    );
   }
 
   @override

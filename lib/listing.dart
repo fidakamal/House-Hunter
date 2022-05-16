@@ -206,7 +206,9 @@ class _Listing extends State<Listing> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  Message(document!["user"])));
+                                  Message(receiver: document!["user"])
+                          )
+                      );
                     },
                     color: Colors.cyanAccent.shade700)
               ],

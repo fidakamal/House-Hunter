@@ -2,40 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final _firestore = FirebaseFirestore.instance;
-late User loggedInUser;
-late String receiver;
-
 class Message extends StatefulWidget {
-  Message(String landlord) {
-    receiver = landlord;
-  }
+  const Message({Key? key, required this.receiver}) : super(key: key);
+  final String receiver;
 
   @override
   State<Message> createState() => _MessageState();
 }
 
 class _MessageState extends State<Message> {
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   late String messageText;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
+  void sendMessage() {
+    _firestore.collection("messages").add({
+      "people": [_auth.currentUser!.email!, widget.receiver],
+      "message": messageText,
+      "sender": _auth.currentUser!.email!,
+      "time": Timestamp.fromDate(DateTime.now()),
+    });
   }
 
   @override
@@ -43,28 +29,18 @@ class _MessageState extends State<Message> {
     return Scaffold(
       body: Column(
         children: [
-          MessageStream(),
+          MessageStream(user: _auth.currentUser!.email!, receiver: widget.receiver),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
                 child: TextField(
-                  onChanged: (value) {
-                    messageText = value;
-                  },
+                  onChanged: (value) => messageText = value,
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  _firestore.collection("messages").add({
-                    "message": messageText,
-                    "sender": loggedInUser.email,
-                    "receiver": receiver,
-                  });
-                },
-                child: Text(
-                  'Send',
-                ),
+                onPressed: () => sendMessage(),
+                child: Text('Send'),
               ),
             ],
           ),
@@ -75,31 +51,37 @@ class _MessageState extends State<Message> {
 }
 
 class MessageStream extends StatelessWidget {
+  const MessageStream({Key? key, required this.user, required this.receiver}) : super(key: key);
+  final String user;
+  final String receiver;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection("messages").snapshots(),
+      stream: FirebaseFirestore.instance.collection("messages")
+          .where("people", arrayContains: user).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.lightBlueAccent,
             ),
           );
         }
-        final messages = snapshot.data?.docs.reversed;
+
+        var messages = snapshot.data?.docs;
+        messages = messages!.where((message) => message["people"].contains(receiver)).toList();
+        messages.sort((a, b) => b["time"].compareTo(a["time"]));
+
         List<MessageBubble> messageBubbles = [];
         for (var message in messages!) {
           final messageText = message["message"];
           final sender = message["sender"];
-          final receiver = message["receiver"];
-
-          final currentUser = loggedInUser.email;
 
           final messageBubble = MessageBubble(
             sender: sender,
             text: messageText,
-            isMe: sender == currentUser ? true : false,
+            isMe: sender == user,
           );
           messageBubbles.add(messageBubble);
         }
@@ -151,7 +133,7 @@ class MessageBubble extends StatelessWidget {
                 horizontal: 20.0,
               ),
               child: Text(
-                "$text",
+                text,
                 style: TextStyle(
                   color: isMe ? Colors.white : Colors.black54,
                   fontSize: 15.0,
