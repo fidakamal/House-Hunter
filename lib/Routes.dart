@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:house_hunter/Navigation.dart';
 import 'package:house_hunter/listing.dart';
+import 'package:house_hunter/messaging/message_list.dart';
 import 'package:house_hunter/search_bar.dart';
 import 'package:house_hunter/map.dart';
 import 'package:house_hunter/list_view.dart';
@@ -55,12 +56,18 @@ class _Routes extends State<Routes> {
     );
   }
 
+  Widget messages() {
+    return SafeArea(
+      child: MessageList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Navigation>(builder: (context, navigation, child) {
       return IndexedStack(
         index: navigation.currentPage.index,
-        children: [mapPage(), listViewPage(), resultPage(), profilePage()],
+        children: [mapPage(), listViewPage(), resultPage(), profilePage(), messages()],
       );
     });
   }

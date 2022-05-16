@@ -3,7 +3,7 @@ import 'package:house_hunter/Navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-enum PageName { map, list, result, profile }
+enum PageName { map, list, result, profile, messages }
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -48,6 +48,14 @@ class BottomNavigation extends StatelessWidget {
                 size: 25.0,
               ),
               title: const Text("Profile"),
+              selectedColor: Colors.cyan[400],
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(
+                Icons.message_rounded,
+                size: 25.0,
+              ),
+              title: const Text("Texts"),
               selectedColor: Colors.cyan[400],
             ),
           ],
