@@ -15,6 +15,7 @@ class BottomNavigation extends StatelessWidget {
         padding: const EdgeInsets.all(1.0),
         color: Colors.white,
         child: SalomonBottomBar(
+          itemPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           currentIndex: navigation.currentPage.index,
           onTap: (i) => navigation.updateCurrentPage(PageName.values[i]),
           items: [
