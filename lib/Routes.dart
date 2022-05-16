@@ -67,7 +67,13 @@ class _Routes extends State<Routes> {
     return Consumer<Navigation>(builder: (context, navigation, child) {
       return IndexedStack(
         index: navigation.currentPage.index,
-        children: [mapPage(), listViewPage(), resultPage(), profilePage(), messages()],
+        children: [
+          mapPage(),
+          listViewPage(),
+          resultPage(),
+          messages(),
+          profilePage()
+        ],
       );
     });
   }
