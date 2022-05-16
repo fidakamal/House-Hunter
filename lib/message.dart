@@ -41,13 +41,13 @@ class _MessageState extends State<Message> {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.arrow_back),
+                    Icon(Icons.arrow_back, color: Colors.cyan[300]),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
                       "Back",
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: Colors.cyan[300]),
                     ),
                   ],
                 ),
@@ -73,7 +73,7 @@ class _MessageState extends State<Message> {
                             Radius.circular(60),
                           ),
                           borderSide: BorderSide(
-                            color: Colors.blue,
+                            color: Colors.cyan[300]!,
                             width: 5,
                           ),
                         ),
@@ -82,7 +82,7 @@ class _MessageState extends State<Message> {
                             Radius.circular(60),
                           ),
                           borderSide: BorderSide(
-                            color: Colors.lightBlueAccent,
+                            color: Colors.cyan[300]!,
                             width: 2,
                           ),
                         ),
@@ -99,7 +99,7 @@ class _MessageState extends State<Message> {
                       Icon(
                         Icons.send_rounded,
                         size: 30,
-                        color: Colors.lightBlueAccent,
+                        color: Colors.cyan[300],
                       ),
                     ],
                   ),
@@ -194,7 +194,7 @@ class MessageBubble extends StatelessWidget {
               bottomRight: Radius.circular(30.0),
             ),
             elevation: 5.0,
-            color: isMe ? Colors.lightBlueAccent : Colors.white,
+            color: isMe ? Colors.cyan[300] : Colors.white,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 10.0,
