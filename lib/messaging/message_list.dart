@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:house_hunter/Navigation.dart';
 import 'package:house_hunter/bottom_navigation.dart';
@@ -43,8 +44,7 @@ class _MessageListState extends State<MessageList> {
             SizedBox(height: 10.0),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 60),
-              child: Text(
-                  "Please log in to view your messages.",
+              child: Text("Please log in to view your messages.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14, height: 1.5, color: Colors.black38)),
@@ -56,10 +56,12 @@ class _MessageListState extends State<MessageList> {
                   style: ElevatedButton.styleFrom(
                       primary: Colors.cyanAccent[700],
                       padding:
-                      EdgeInsets.symmetric(vertical: 17, horizontal: 10),
+                          EdgeInsets.symmetric(vertical: 17, horizontal: 10),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () => Provider.of<Navigation>(context, listen:false).updateCurrentPage(PageName.profile),
+                  onPressed: () =>
+                      Provider.of<Navigation>(context, listen: false)
+                          .updateCurrentPage(PageName.profile),
                   child: Text("Log In")),
             )
           ],
@@ -101,11 +103,13 @@ class _MessageListState extends State<MessageList> {
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.cyanAccent[700],
-                            padding:
-                            EdgeInsets.symmetric(vertical: 17, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 17, horizontal: 10),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
-                        onPressed: () => Provider.of<Navigation>(context, listen:false).updateCurrentPage(PageName.map),
+                        onPressed: () =>
+                            Provider.of<Navigation>(context, listen: false)
+                                .updateCurrentPage(PageName.map),
                         child: Text("Start Browsing")),
                   )
                 ],
@@ -127,40 +131,31 @@ class _MessageListState extends State<MessageList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Row(
-                  //   children: const [
-                  //     Icon(Icons.mail_outlined, size: 35.0),
-                  //     SizedBox(width: 7.0),
-                  //     Text(
-                  //       "Messages",
-                  //       style: TextStyle(
-                  //           fontSize: 30.0, fontFamily: "SignikaNegative"),
-                  //     ),
-                  //   ],
-                  // ),
-                  SizedBox(height: 10.0),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: receivers.length,
                     itemBuilder: ((context, index) {
-                      return Material(
-                        elevation: 1,
-                        color: Colors.cyan[50],
-                        borderRadius: BorderRadius.circular(40),
-                        child: InkWell(
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          onTap: () => goToDM(receivers.elementAt(index)),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 20),
-                            child: Text(
-                              receivers.elementAt(index).split("@")[0],
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: "SignikaNegative",
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        child: Material(
+                          elevation: 1,
+                          color: Colors.cyan[50],
+                          borderRadius: BorderRadius.circular(40),
+                          child: InkWell(
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            onTap: () => goToDM(receivers.elementAt(index)),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 20),
+                              child: Text(
+                                receivers.elementAt(index).split("@")[0],
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: "SignikaNegative",
+                                ),
                               ),
                             ),
                           ),
