@@ -18,6 +18,7 @@ class Search extends ChangeNotifier {
   String lastSearch = "";
   TextEditingController textController = TextEditingController();
   bool currentLocationSearched = false;
+  bool enableSearching = false;
 
   void toggleLoading() {
     loading = !loading;
@@ -39,6 +40,8 @@ class Search extends ChangeNotifier {
   void clearSearch() {
     results = [];
     lastSearch = "";
+    enableSearching = false;
+    currentLocationSearched = false;
     notifyListeners();
   }
 
@@ -81,6 +84,7 @@ class Search extends ChangeNotifier {
     stream.listen((List<DocumentSnapshot> documentList) {
       results = filterRentals(documentList);
       center = LatLng(geopoint.latitude, geopoint.longitude);
+      enableSearching = true;
       toggleLoading();
     });
   }

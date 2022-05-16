@@ -142,7 +142,7 @@ class _SearchFilters extends State<SearchFilters> {
     search.updateFilters(roomController.selectedIndexes.toList(),
         bathController.selectedIndex ?? 0, selectedPriceRange);
     Navigator.pop(context);
-    if (search.results.isEmpty) return;
+    if (!search.enableSearching)  return;
     search.toggleLoading();
     search.seachRentals(search.center.latitude, search.center.longitude);
   }
