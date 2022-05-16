@@ -14,6 +14,7 @@ class _MessageState extends State<Message> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   late String messageText;
+  TextEditingController messageController = TextEditingController();
 
   void sendMessage() {
     _firestore.collection("messages").add({
@@ -22,6 +23,7 @@ class _MessageState extends State<Message> {
       "sender": _auth.currentUser!.email!,
       "time": Timestamp.fromDate(DateTime.now()),
     });
+    messageController.clear();
   }
 
   @override
@@ -35,6 +37,7 @@ class _MessageState extends State<Message> {
             children: <Widget>[
               Expanded(
                 child: TextField(
+                  controller: messageController,
                   onChanged: (value) => messageText = value,
                 ),
               ),
