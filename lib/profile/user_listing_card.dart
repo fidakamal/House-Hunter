@@ -26,16 +26,18 @@ class _UserListingCard extends State<UserListingCard> {
 
     final storage = FirebaseStorage.instance.ref();
     String url = "";
-    ListResult images =
-        await storage.child("/rentalImages/${widget.doc.id}").listAll();
-    if (images.items.isNotEmpty) {
-      url = await images.items[0].getDownloadURL();
-    }
+    while (url == "") {
+      ListResult images =
+      await storage.child("/rentalImages/${widget.doc.id}").listAll();
+      if (images.items.isNotEmpty) {
+        url = await images.items[0].getDownloadURL();
+      }
 
-    setState(() {
-      image = url;
-      loadingImage = false;
-    });
+      setState(() {
+        image = url;
+        loadingImage = false;
+      });
+    }
   }
 
   @override
