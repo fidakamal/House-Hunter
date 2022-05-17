@@ -47,7 +47,7 @@ class _UserListingCard extends State<UserListingCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: InkWell(
