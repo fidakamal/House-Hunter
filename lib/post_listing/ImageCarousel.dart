@@ -42,7 +42,8 @@ class ImageCarousel extends StatelessWidget {
               right: 0,
               child: IconButton(
                 onPressed: () => removeImage(images.indexOf(image)),
-                icon: Icon(Icons.cancel_rounded, color: Colors.red[300], size: 30),
+                icon: Icon(Icons.cancel_rounded,
+                    color: Colors.red[300], size: 30),
               ),
             ),
           ]));
@@ -61,7 +62,8 @@ class ImageCarousel extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)),
             ),
             onPressed: () => insertImage(),
-            child: Icon(Icons.add_rounded, size: 50, color: Colors.blueGrey[200]),
+            child:
+                Icon(Icons.add_rounded, size: 50, color: Colors.blueGrey[200]),
           ),
         ));
 

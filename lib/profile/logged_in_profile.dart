@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:house_hunter/profile/user_listing_card.dart';
 import 'package:house_hunter/components/rounded_button.dart';
 import 'package:house_hunter/post_listing/post_listing.dart';
+import 'package:house_hunter/profile/landlord_listing_details.dart';
+import 'package:provider/provider.dart';
+
+import '../Navigation.dart';
 
 class LoggedInProfile extends StatelessWidget {
   const LoggedInProfile(
@@ -50,10 +54,21 @@ class LoggedInProfile extends StatelessWidget {
                 return ListView(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  children: rentals.map((rental) => UserListingCard(
-                    doc: rental,
-                    onTap: () {},
-                  )).toList(),
+                  children: rentals
+                      .map((rental) => UserListingCard(
+                            doc: rental,
+                            onTap: () {
+                              Provider.of<Navigation>(context, listen: false)
+                                  .updateSelectedDocument(rental);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LandlordListingDetails()),
+                              );
+                            },
+                          ))
+                      .toList(),
                 );
               },
             ),

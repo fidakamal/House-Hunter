@@ -38,7 +38,7 @@ dependencies:
   firebase_storage: ^10.2.15
   image_picker: ^0.8.5
   geolocator: ^8.2.1
-  location: ^4.3.0
+  location: ^4.4.0
   flutter_svg: ^1.0.3
   url_launcher: ^6.1.0
   flutter_map_tile_caching: ^4.0.1
