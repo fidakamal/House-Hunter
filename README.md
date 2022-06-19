@@ -1,6 +1,6 @@
 # House Hunter
 
-House Hunter is a map-based rental listing searching app. It is built using Flutter and uses the Leaflet viewing library along with the Tilestrack tiles API, working with Firebase on the backend.
+House Hunter is a map-based rental listing searching app. It is built using Flutter and uses the Leaflet viewing library along with the Tracestrack tiles API, working with Firebase on the backend.
 
 ## Features
 * Search for rental listings using an interactive map.
