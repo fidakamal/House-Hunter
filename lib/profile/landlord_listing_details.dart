@@ -47,6 +47,11 @@ class _LandlordListingDetailsState extends State<LandlordListingDetails> {
     });
   }
 
+  Future<void> deleteListing(DocumentSnapshot doc) async {
+    await doc.reference.delete();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<Navigation>(builder: (context, navigation, child) {
@@ -220,7 +225,43 @@ class _LandlordListingDetailsState extends State<LandlordListingDetails> {
                               title: "Delete",
                               icon: Icons.delete_forever,
                               iconSize: 18,
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    content: Text(
+                                      "Are you sure you want to delete this listing?",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          deleteListing(document!);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          "Delete",
+                                          style: TextStyle(
+                                              color: Colors.red.shade400,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          "Cancel",
+                                          style: TextStyle(
+                                              color: Colors.cyan.shade400,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                               color: Colors.red.shade400,
                             ),
                           ],
