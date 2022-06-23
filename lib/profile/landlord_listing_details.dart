@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../ImageCarousel.dart';
 import '../Navigation.dart';
+import '../edit_listing/edit_listing.dart';
 
 class LandlordListingDetails extends StatefulWidget {
   const LandlordListingDetails({Key? key}) : super(key: key);
@@ -205,7 +206,14 @@ class _LandlordListingDetailsState extends State<LandlordListingDetails> {
                               title: "Edit",
                               icon: Icons.edit_note,
                               iconSize: 22,
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditListing(document!)),
+                                );
+                              },
                               color: Colors.cyan.shade400,
                             ),
                             EditButton(

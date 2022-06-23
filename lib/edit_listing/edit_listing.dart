@@ -1,32 +1,38 @@
-import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:house_hunter/post_listing/ImageCarousel.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:geocoding/geocoding.dart';
 
-class PostListing extends StatefulWidget {
-  const PostListing({Key? key}) : super(key: key);
+import '../ImageCarousel.dart';
+import '../Navigation.dart';
+
+class EditListing extends StatefulWidget {
+  EditListing(this.document);
+
+  DocumentSnapshot document;
 
   @override
-  State<PostListing> createState() => _PostListingState();
+  State<EditListing> createState() => _EditListingState();
 }
 
-class _PostListingState extends State<PostListing> {
+class _EditListingState extends State<EditListing> {
+  final _formKey = GlobalKey<FormState>();
   List<int> dropdownOptions = [1, 2, 3, 4, 5];
-  late String buildingName = "", address, contactNo;
-  late int rent, beds, baths, squareFeet = 0;
+  late String buildingName, address, contactNo;
+  late int rent, beds, baths, squareFeet;
   final _firestore = FirebaseFirestore.instance;
   final geo = Geoflutterfire();
+  bool addressEdited = false;
   final _auth = FirebaseAuth.instance;
   late User loggedInUser;
   List<File> images = [];
   ImagePicker picker = ImagePicker();
   final storage = FirebaseStorage.instance.ref();
-  final _formKey = GlobalKey<FormState>();
+  //late int beds;
 
   Future<GeoFirePoint> getGeopoint(address) async {
     List<Location> coordinates = await locationFromAddress(address);
@@ -35,21 +41,8 @@ class _PostListingState extends State<PostListing> {
     return geo.point(latitude: latitude, longitude: longitude);
   }
 
-  Future<void> getCurrentUser() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) loggedInUser = user;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void post() async {
-    Navigator.pop(context);
-    getCurrentUser();
-    GeoFirePoint geopoint = await getGeopoint(address);
-    DocumentReference doc = await _firestore.collection("rentals").add({
-      "user": loggedInUser.email,
+  Future<void> editListing() async {
+    widget.document.reference.update({
       "name": buildingName,
       "address": address,
       "rent": rent,
@@ -57,26 +50,28 @@ class _PostListingState extends State<PostListing> {
       "baths": baths,
       "size": squareFeet,
       "phone": contactNo,
-      "location": geopoint.data,
     });
 
-    for (var image in images) {
-      storage
-          .child("/rentalImages/${doc.id}/${image.path.split("/").last}")
-          .putFile(image);
+    if (addressEdited == true) {
+      GeoFirePoint geopoint = await getGeopoint(address);
+      widget.document.reference.update({"location": geopoint.data});
     }
+
+    Navigation().reloadUpdatedListing();
+    Navigator.pop(context);
   }
 
-  void addImages() async {
-    List<XFile>? images = await picker.pickMultiImage();
-    if (images == null) return;
-    List<File> imageFiles = images.map((file) => File(file.path)).toList();
-    setState(() => this.images.insertAll(0, imageFiles));
-  }
+  @override
+  void initState() {
+    super.initState();
 
-  void removeImage(int index) {
-    print("Removing " + index.toString());
-    setState(() => images.removeAt(index));
+    buildingName = widget.document["name"];
+    address = widget.document["address"];
+    contactNo = widget.document["phone"];
+    rent = widget.document["rent"];
+    beds = widget.document["bedrooms"];
+    baths = widget.document["baths"];
+    squareFeet = widget.document["size"];
   }
 
   @override
@@ -97,7 +92,7 @@ class _PostListingState extends State<PostListing> {
                       Icon(Icons.launch_rounded, size: 28.0),
                       SizedBox(width: 8.0),
                       Text(
-                        "Post a Listing",
+                        "Edit Listing",
                         style: TextStyle(
                             fontSize: 30.0, fontFamily: "SignikaNegative"),
                       ),
@@ -105,15 +100,20 @@ class _PostListingState extends State<PostListing> {
                   ),
                   SizedBox(height: 30.0),
                   fieldLabel("Name of Apartment Building"),
-                  TextField(
+                  TextFormField(
+                    initialValue: widget.document["name"],
                     style: TextStyle(fontSize: 16.0),
                     onChanged: (value) => buildingName = value,
                   ),
                   SizedBox(height: 25.0),
                   fieldLabel("Address"),
                   TextFormField(
+                    initialValue: widget.document["address"],
                     style: TextStyle(fontSize: 16.0),
-                    onChanged: (value) => address = value,
+                    onChanged: (value) {
+                      address = value;
+                      addressEdited = true;
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Address is required";
@@ -125,6 +125,7 @@ class _PostListingState extends State<PostListing> {
                   SizedBox(height: 25.0),
                   fieldLabel("Rent"),
                   TextFormField(
+                    initialValue: widget.document["rent"].toString(),
                     style: TextStyle(fontSize: 16.0),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => rent = int.parse(value),
@@ -139,6 +140,7 @@ class _PostListingState extends State<PostListing> {
                   SizedBox(height: 25.0),
                   fieldLabel("Beds"),
                   DropdownButtonFormField(
+                    hint: Text(widget.document["bedrooms"].toString()),
                     items: dropdownOptions.map((int val) {
                       return DropdownMenuItem(
                         value: val,
@@ -157,6 +159,7 @@ class _PostListingState extends State<PostListing> {
                   SizedBox(height: 25.0),
                   fieldLabel("Baths"),
                   DropdownButtonFormField(
+                    hint: Text(widget.document["baths"].toString()),
                     items: dropdownOptions.map((int val) {
                       return DropdownMenuItem(
                         value: val,
@@ -174,7 +177,8 @@ class _PostListingState extends State<PostListing> {
                   ),
                   SizedBox(height: 25.0),
                   fieldLabel("Size (sq. ft.)"),
-                  TextField(
+                  TextFormField(
+                    initialValue: widget.document["size"].toString(),
                     style: TextStyle(fontSize: 16.0),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => squareFeet = int.parse(value),
@@ -182,6 +186,7 @@ class _PostListingState extends State<PostListing> {
                   SizedBox(height: 25.0),
                   fieldLabel("Contact No."),
                   TextFormField(
+                    initialValue: widget.document["phone"],
                     style: TextStyle(fontSize: 16.0),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => contactNo = value,
@@ -194,28 +199,28 @@ class _PostListingState extends State<PostListing> {
                     },
                   ),
                   SizedBox(height: 30.0),
-                  if (images.isEmpty)
-                    Container(
-                      margin: EdgeInsets.only(bottom: 40),
-                      child: Center(
-                        child: SizedBox(
-                          width: 200.0,
-                          child: ElevatedButton(
-                            onPressed: () => addImages(),
-                            child: Text("Add Images",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15.0)),
-                            style: kImageButtonStyle,
-                          ),
-                        ),
-                      ),
-                    )
-                  else
-                    ImageCarousel(
-                      images: images,
-                      removeImage: (index) => removeImage(index),
-                      insertImage: () => addImages(),
-                    ),
+                  // if (images.isEmpty)
+                  //   Container(
+                  //     margin: EdgeInsets.only(bottom: 40),
+                  //     child: Center(
+                  //       child: SizedBox(
+                  //         width: 200.0,
+                  //         child: ElevatedButton(
+                  //           onPressed: () => addImages(),
+                  //           child: Text("Add Images",
+                  //               style: TextStyle(
+                  //                   color: Colors.white, fontSize: 15.0)),
+                  //           style: kImageButtonStyle,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   )
+                  // else
+                  //   ImageCarousel(
+                  //     images: images,
+                  //     removeImage: (index) => removeImage(index),
+                  //     insertImage: () => addImages(),
+                  //   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -224,11 +229,11 @@ class _PostListingState extends State<PostListing> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              post();
+                              editListing();
                             }
                           },
                           child: Text(
-                            "Post",
+                            "Save Changes",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 15.0),
                           ),
@@ -283,15 +288,5 @@ var kCancelButtonStyle = ButtonStyle(
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-  ),
-);
-
-var kImageButtonStyle = ButtonStyle(
-  backgroundColor: MaterialStateProperty.all(Colors.cyan[300]),
-  padding: MaterialStateProperty.all<EdgeInsets>(
-    EdgeInsets.only(top: 8.0, bottom: 8.0),
-  ),
-  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
   ),
 );

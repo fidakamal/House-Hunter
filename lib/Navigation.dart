@@ -6,8 +6,12 @@ class Navigation extends ChangeNotifier {
   PageName currentPage = PageName.map;
   late DocumentSnapshot? selectedDocument = null;
 
-  void updateCurrentPage (PageName newPage) {
+  void updateCurrentPage(PageName newPage) {
     currentPage = newPage;
+    notifyListeners();
+  }
+
+  void reloadUpdatedListing() {
     notifyListeners();
   }
 
