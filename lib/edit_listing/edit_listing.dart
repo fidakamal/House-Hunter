@@ -6,6 +6,7 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:geocoding/geocoding.dart';
+import 'package:provider/provider.dart';
 
 import '../ImageCarousel.dart';
 import '../Navigation.dart';
@@ -29,10 +30,10 @@ class _EditListingState extends State<EditListing> {
   bool addressEdited = false;
   final _auth = FirebaseAuth.instance;
   late User loggedInUser;
+  late String documentId;
   List<File> images = [];
   ImagePicker picker = ImagePicker();
   final storage = FirebaseStorage.instance.ref();
-  //late int beds;
 
   Future<GeoFirePoint> getGeopoint(address) async {
     List<Location> coordinates = await locationFromAddress(address);
@@ -42,7 +43,7 @@ class _EditListingState extends State<EditListing> {
   }
 
   Future<void> editListing() async {
-    widget.document.reference.update({
+    await widget.document.reference.update({
       "name": buildingName,
       "address": address,
       "rent": rent,
@@ -54,10 +55,14 @@ class _EditListingState extends State<EditListing> {
 
     if (addressEdited == true) {
       GeoFirePoint geopoint = await getGeopoint(address);
-      widget.document.reference.update({"location": geopoint.data});
+      await widget.document.reference.update({"location": geopoint.data});
     }
 
-    Navigation().reloadUpdatedListing();
+    DocumentSnapshot updatedDoc =
+        await _firestore.collection("rentals").doc(documentId).get();
+    Provider.of<Navigation>(context, listen: false)
+        .updateSelectedDocument(updatedDoc);
+
     Navigator.pop(context);
   }
 
@@ -72,6 +77,8 @@ class _EditListingState extends State<EditListing> {
     beds = widget.document["bedrooms"];
     baths = widget.document["baths"];
     squareFeet = widget.document["size"];
+
+    documentId = widget.document.id;
   }
 
   @override

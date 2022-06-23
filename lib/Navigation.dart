@@ -17,5 +17,6 @@ class Navigation extends ChangeNotifier {
 
   void updateSelectedDocument(DocumentSnapshot newDocument) {
     selectedDocument = newDocument;
+    notifyListeners();
   }
 }
