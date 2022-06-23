@@ -147,7 +147,7 @@ class _EditListingState extends State<EditListing> {
                   SizedBox(height: 25.0),
                   fieldLabel("Beds"),
                   DropdownButtonFormField(
-                    hint: Text(widget.document["bedrooms"].toString()),
+                    value: int.parse(widget.document["bedrooms"].toString()),
                     items: dropdownOptions.map((int val) {
                       return DropdownMenuItem(
                         value: val,
@@ -166,7 +166,7 @@ class _EditListingState extends State<EditListing> {
                   SizedBox(height: 25.0),
                   fieldLabel("Baths"),
                   DropdownButtonFormField(
-                    hint: Text(widget.document["baths"].toString()),
+                    value: int.parse(widget.document["baths"].toString()),
                     items: dropdownOptions.map((int val) {
                       return DropdownMenuItem(
                         value: val,
