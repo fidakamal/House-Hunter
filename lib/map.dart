@@ -23,8 +23,9 @@ class _Map extends State<Map> with TickerProviderStateMixin {
   bool mapReady = false;
   bool storageReady = false;
   late StorageCachingTileProvider cachingTileProvider;
-  String tileProvider =
-      "https://tile.tracestrack.com/en/{z}/{x}/{y}.png?key=${dotenv.env['MAP_KEY'] ?? ""}";
+  String baseTileProvider =
+      "https://tile.tracestrack.com/base/{z}/{x}/{y}.png?key=${dotenv.env['MAP_KEY'] ?? ""}";
+  String overlayTileProvider = "https://tile.tracestrack.com/en-name/{z}/{x}/{y}.png?key=${dotenv.env['MAP_KEY'] ?? ""}";
 
   void getCacheLocation() async {
     var status = await Permission.storage.status;
@@ -164,7 +165,14 @@ class _Map extends State<Map> with TickerProviderStateMixin {
         ),
         layers: [
           TileLayerOptions(
-            urlTemplate: tileProvider,
+            urlTemplate: baseTileProvider,
+            tileProvider: storageReady
+                ? cachingTileProvider
+                : NonCachingNetworkTileProvider(),
+          ),
+          TileLayerOptions(
+            urlTemplate: overlayTileProvider,
+            backgroundColor: Colors.transparent,
             tileProvider: storageReady
                 ? cachingTileProvider
                 : NonCachingNetworkTileProvider(),
